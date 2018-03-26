@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import gamesetup.*;
@@ -34,7 +35,10 @@ public class Queen implements ChessPiece {
 
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<PieceMove> moves = new HashSet<>();
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		Rook.straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		return moves;
 	}
 }
