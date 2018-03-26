@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import gamesetup.*;
@@ -34,7 +35,21 @@ public class King implements ChessPiece {
 
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<PieceMove> moves = new HashSet<>();
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		int myRow = myLocation[0];
+		int myCol = myLocation[1];
+		for(int curRow = myRow - 1; curRow <= myRow + 1; curRow++) {
+			for(int curCol = myCol - 1; curCol <= myCol + 1; curCol++) {
+				if((curRow != myRow || curCol != myCol) && board.isInBounds(curRow, curCol)) {
+					//TODO: not checking for being in check
+					ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+					if(otherPiece == null || otherPiece.isWhite() != isWhite) {
+						moves.add(new PieceMove(curRow, curCol, otherPiece));
+					}
+				}
+			}
+		}
+		return moves;
 	}
 }
