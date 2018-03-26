@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import gamesetup.*;
@@ -34,7 +35,47 @@ public class Bishop implements ChessPiece {
 
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<PieceMove> moves = new HashSet<>();
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		int myRow = myLocation[0];
+		int myCol = myLocation[1];
+		diagonalMoves(myRow, myCol, isWhite, board, moves);
+		return moves;
+	}
+	
+	/**
+	 * finds any possible moves of a bishop/queen starting at the given spot
+	 * 
+	 * @param pieceRow The row of the spot it starts on
+	 * @param pieceCol The column of the spot it starts on
+	 * @param pieceIsWhite Whether the piece is white or not
+	 * @param board The chess board the piece moves on
+	 * @param moves The set to add possible found moves to
+	 */
+	public static void diagonalMoves(int pieceRow, int pieceCol, boolean pieceIsWhite,
+			ChessBoard board, Set<PieceMove> moves) {
+		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, -1, pieceIsWhite, board, moves); //up left
+		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, 1, pieceIsWhite, board, moves); //up right
+		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, 1, -1, pieceIsWhite, board, moves); //down left
+		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, 1, 1, pieceIsWhite, board, moves); //down right
+	}
+	
+	//adds all of the diagonal moves in the given direction where the row and column increase by
+	//the given direction amount on each iteration to represent going in one of the four diagonal directions
+	private static void diagonalMovesInDirection(int curRow, int curCol, int rowDirection,
+			int colDirection, boolean pieceIsWhite, ChessBoard board, Set<PieceMove> moves) {
+		while(board.isInBounds(curRow, curCol)) {
+			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+			if(otherPiece == null) { //can keep going in this direction
+				moves.add(new PieceMove(curRow, curCol));
+				curRow += rowDirection;
+				curCol += colDirection;
+			} else {
+				if(otherPiece.isWhite() != pieceIsWhite) { //can take it
+					moves.add(new PieceMove(curRow, curCol, otherPiece));
+				}
+				break; //if there's another piece, you can't move past it
+			}
+		}
 	}
 }
