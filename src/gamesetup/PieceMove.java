@@ -3,15 +3,17 @@ package gamesetup;
 import pieces.ChessPiece;
 
 public class PieceMove {
-	public final BoardSpot destination;
+	public final int destinationRow;
+	public final int destinationColumn;
 	public final ChessPiece takenPiece;
 	
-	public PieceMove(BoardSpot destination) {
-		this(destination, null);
+	public PieceMove(int destinationRow, int destinationColumn) {
+		this(destinationRow, destinationColumn, null);
 	}
 	
-	public PieceMove(BoardSpot destination, ChessPiece takenPiece) {
-		this.destination = destination;
+	public PieceMove(int destinationRow, int destinationColumn, ChessPiece takenPiece) {
+		this.destinationRow = destinationRow;
+		this.destinationColumn = destinationColumn;
 		this.takenPiece = takenPiece;
 	}
 }

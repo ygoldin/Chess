@@ -2,7 +2,6 @@ package gamesetup;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,17 +9,24 @@ import pieces.ChessPiece;
 
 public class ChessBoard {
 	private static final int SIZE = 8;
-	private Map<ChessPiece, BoardSpot> whitePieces;
-	private Map<ChessPiece, BoardSpot> blackPieces;
-	private Set<BoardSpot> board;
+	private Map<ChessPiece, Integer[]> whitePieces;
+	private Map<ChessPiece, Integer[]> blackPieces;
+	private ChessPiece[][] board;
 	private boolean whiteTurn;
 	
 	public ChessBoard() {
 		whitePieces = initializeTeamPieces(true);
 		blackPieces = initializeTeamPieces(false);
-		board = new HashSet<>();
-		//add pieces to set
+		board = new ChessPiece[SIZE][SIZE];
+		//add pieces to board
 		whiteTurn = true;
+	}
+	
+	//sets up the pieces for the given team at the start of the game
+	private Map<ChessPiece, Integer[]> initializeTeamPieces(boolean isWhite) {
+		Map<ChessPiece, Integer[]> pieces = new HashMap<>();
+		
+		return pieces;
 	}
 	
 	/**
@@ -29,7 +35,7 @@ public class ChessBoard {
 	 * @param isWhite Whether the client wants the white or black pieces
 	 * @return an unmodifiable map from every chess piece on the team to its location on the board
 	 */
-	public Map<ChessPiece, BoardSpot> getAllPieces(boolean isWhite) {
+	public Map<ChessPiece, Integer[]> getAllPieces(boolean isWhite) {
 		if(isWhite) {
 			return Collections.unmodifiableMap(whitePieces);
 		} else {
@@ -37,20 +43,14 @@ public class ChessBoard {
 		}
 	}
 	
-	//sets up the pieces for the given team at the start of the game
-	private Map<ChessPiece, BoardSpot> initializeTeamPieces(boolean isWhite) {
-		Map<ChessPiece, BoardSpot> pieces = new HashMap<>();
-		
-		return pieces;
-	}
-	
 	/**
 	 * checks if there's a piece at the given spot
 	 * 
-	 * @param spot The spot to look at
+	 * @param row The row of the spot
+	 * @param col The column of the spot
 	 * @return the chess piece at that spot, or null if no piece exists there
 	 */
-	public ChessPiece getPieceAtSpot(BoardSpot spot) {
+	public ChessPiece getPieceAtSpot(int row, int col) {
 		return null;
 	}
 	
@@ -58,9 +58,9 @@ public class ChessBoard {
 	 * checks the location of a given piece
 	 * 
 	 * @param piece The piece to look at
-	 * @return the location of the piece on the board
+	 * @return the location of the piece on the board, in the form [row, col]
 	 */
-	public BoardSpot getSpotOfPiece(ChessPiece piece) {
+	public Integer[] getSpotOfPiece(ChessPiece piece) {
 		return null;
 	}
 	
@@ -78,10 +78,11 @@ public class ChessBoard {
 	 * moves the given piece to the given spot
 	 * 
 	 * @param piece The piece to move
-	 * @param spot The spot to move the piece to
+	 * @param row The row of the spot
+	 * @param col The column of the spot
 	 * @return The piece taken during this move, or null if no piece was taken
 	 */
-	public ChessPiece makeMove(ChessPiece piece, BoardSpot spot) {
+	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
 		return null;
 	}
 	
@@ -92,5 +93,16 @@ public class ChessBoard {
 	 */
 	public boolean isWhiteTurn() {
 		return whiteTurn;
+	}
+	
+	/**
+	 * returns if the given spot is in bounds on the board
+	 * 
+	 * @param row The row of the spot
+	 * @param col The column of the spot
+	 * @return true if it's in bounds, false otherwise
+	 */
+	public boolean isInBounds(int row, int col) {
+		return row >= 0 && row < SIZE && col >= 0 && col < SIZE;
 	}
 }

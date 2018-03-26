@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.Set;
 import gamesetup.*;
 
 public interface ChessPiece {
@@ -8,5 +9,5 @@ public interface ChessPiece {
 	
 	public boolean isWhite();
 	
-	public PieceMove legalMoves(ChessBoard board);
+	public Set<PieceMove> legalMoves(ChessBoard board);
 }

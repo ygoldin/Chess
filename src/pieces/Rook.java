@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Set;
+
 import gamesetup.ChessBoard;
 import gamesetup.PieceMove;
 
@@ -32,7 +34,7 @@ public class Rook implements ChessPiece {
 	}
 
 	@Override
-	public PieceMove legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board) {
 		// TODO Auto-generated method stub
 		return null;
 	}

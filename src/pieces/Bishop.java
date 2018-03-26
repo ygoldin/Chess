@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Set;
+
 import gamesetup.*;
 
 public class Bishop implements ChessPiece {
@@ -31,7 +33,7 @@ public class Bishop implements ChessPiece {
 	}
 
 	@Override
-	public PieceMove legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board) {
 		// TODO Auto-generated method stub
 		return null;
 	}

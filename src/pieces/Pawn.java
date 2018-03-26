@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.HashSet;
+import java.util.Set;
 import gamesetup.*;
 
 public class Pawn implements ChessPiece {
@@ -31,9 +33,22 @@ public class Pawn implements ChessPiece {
 	}
 
 	@Override
-	public PieceMove legalMoves(ChessBoard board) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<PieceMove> legalMoves(ChessBoard board) {
+		Set<PieceMove> moves = new HashSet<>();
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		int myRow = myLocation[0];
+		int myCol = myLocation[1];
+		if(isWhite) {
+			if(board.isInBounds(myRow - 1, myCol) && board.getPieceAtSpot(myRow - 1, myCol) == null) {
+				moves.add(new PieceMove(myRow - 1, myCol));
+				if(board.isInBounds(myRow - 2, myCol) && board.getPieceAtSpot(myRow - 2, myCol) == null) {
+					moves.add(new PieceMove(myRow - 2, myCol));
+				}
+			}
+		} else { //black
+			
+		}
+		return moves;
 	}
 
 }
