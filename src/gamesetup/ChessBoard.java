@@ -14,6 +14,8 @@ public class ChessBoard {
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
+	private boolean whiteInCheck;
+	private boolean blackInCheck;
 	private Set<ChessPiece> doubleJumpPawns;
 	
 	public ChessBoard() {
@@ -86,7 +88,7 @@ public class ChessBoard {
 	 * @return The piece taken during this move, or null if no piece was taken
 	 */
 	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
-		//TODO: make sure to clear en passant
+		//TODO: make sure to clear en passant and check for kings in check
 		return null;
 	}
 	
@@ -117,5 +119,23 @@ public class ChessBoard {
 	 */
 	public Set<ChessPiece> pawnsForEnPassant() {
 		return Collections.unmodifiableSet(doubleJumpPawns);
+	}
+	
+	/**
+	 * checks if the white king is in check
+	 * 
+	 * @return true if he is, false otherwise
+	 */
+	public boolean whiteIsInCheck() {
+		return whiteInCheck;
+	}
+	
+	/**
+	 * checks if the black king is in check
+	 * 
+	 * @return true if he is, false otherwise
+	 */
+	public boolean blackIsInCheck() {
+		return blackInCheck;
 	}
 }
