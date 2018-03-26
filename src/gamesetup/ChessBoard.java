@@ -2,6 +2,7 @@ package gamesetup;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ public class ChessBoard {
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
+	private Set<ChessPiece> doubleJumpPawns;
 	
 	public ChessBoard() {
 		whitePieces = initializeTeamPieces(true);
@@ -20,6 +22,7 @@ public class ChessBoard {
 		board = new ChessPiece[SIZE][SIZE];
 		//add pieces to board
 		whiteTurn = true;
+		doubleJumpPawns = new HashSet<>();
 	}
 	
 	//sets up the pieces for the given team at the start of the game
@@ -83,6 +86,7 @@ public class ChessBoard {
 	 * @return The piece taken during this move, or null if no piece was taken
 	 */
 	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
+		//TODO: make sure to clear en passant
 		return null;
 	}
 	
@@ -104,5 +108,14 @@ public class ChessBoard {
 	 */
 	public boolean isInBounds(int row, int col) {
 		return row >= 0 && row < SIZE && col >= 0 && col < SIZE;
+	}
+	
+	/**
+	 * finds all of the pawns that performed a double jump
+	 * 
+	 * @return all of the pawns currently in position to be taken en-passant
+	 */
+	public Set<ChessPiece> pawnsForEnPassant() {
+		return Collections.unmodifiableSet(doubleJumpPawns);
 	}
 }

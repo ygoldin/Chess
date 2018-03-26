@@ -38,23 +38,53 @@ public class Pawn implements ChessPiece {
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		int myRow = myLocation[0];
 		int myCol = myLocation[1];
-		//TODO: add taking moves
+		int direction;
 		if(isWhite) {
-			if(board.isInBounds(myRow - 1, myCol) && board.getPieceAtSpot(myRow - 1, myCol) == null) {
-				moves.add(new PieceMove(myRow - 1, myCol));
-				if(board.isInBounds(myRow - 2, myCol) && board.getPieceAtSpot(myRow - 2, myCol) == null) {
-					moves.add(new PieceMove(myRow - 2, myCol));
-				}
-			}
-		} else { //black
-			if(board.isInBounds(myRow + 1, myCol) && board.getPieceAtSpot(myRow + 1, myCol) == null) {
-				moves.add(new PieceMove(myRow + 1, myCol));
-				if(board.isInBounds(myRow + 2, myCol) && board.getPieceAtSpot(myRow + 2, myCol) == null) {
-					moves.add(new PieceMove(myRow + 2, myCol));
-				}
+			direction = -1;
+		} else {
+			direction = 1;
+		}
+		//move forward one/two spots
+		int oneRowForward = myRow + direction;
+		if(board.isInBounds(oneRowForward, myCol) && board.getPieceAtSpot(oneRowForward, myCol) == null) {
+			moves.add(new PieceMove(oneRowForward, myCol));
+			int twoRowsForward = oneRowForward + direction;
+			if(board.isInBounds(twoRowsForward, myCol) &&
+					board.getPieceAtSpot(twoRowsForward, myCol) == null) {
+				moves.add(new PieceMove(twoRowsForward, myCol));
 			}
 		}
+		//check if you can take a piece diagonally to the left, then right
+		checkTakingDiagonally(oneRowForward, myCol - 1, board, moves);
+		checkTakingDiagonally(oneRowForward, myCol + 1, board, moves);
+		//check if you can perform en passant
+		if(!board.pawnsForEnPassant().isEmpty()) {
+			checkEnPassant(myRow, myCol - 1, board, moves, direction);
+			checkEnPassant(myRow, myCol + 1, board, moves, direction);
+		}
 		return moves;
+	}
+	
+	//checks if you can take a piece in that spot and then adds it to the moves
+	private void checkTakingDiagonally(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves) {
+		if(board.isInBounds(curRow, curCol)) {
+			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+			if(otherPiece != null && otherPiece.isWhite() != isWhite) { //piece of other color
+				moves.add(new PieceMove(curRow, curCol, otherPiece));
+			}
+		}
+	}
+	
+	//checks if there is a pawn in that spot that can be taken en passant
+	private void checkEnPassant(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves,
+			int direction) {
+		if(board.isInBounds(curRow, curCol)) {
+			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+			if(otherPiece != null && otherPiece.isWhite() != isWhite &&
+					board.pawnsForEnPassant().contains(otherPiece)) {
+				moves.add(new PieceMove(curRow + direction, curCol, otherPiece));
+			}
+		}
 	}
 
 }
