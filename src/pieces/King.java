@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -60,6 +61,19 @@ public class King implements ChessPiece {
 	//returns a map from rows to columns of moves that would put the king in a line of fire
 	private Map<Integer, Set<Integer>> movesIntoALineOfFire(ChessBoard board) {
 		Map<ChessPiece, Integer[]> otherTeam = board.getAllPieces(!isWhite);
-		return null;
+		Map<Integer, Set<Integer>> result = new HashMap<>();
+		for(ChessPiece opposingPiece : otherTeam.keySet()) {
+			if(!(opposingPiece instanceof Pawn)) {
+				for(PieceMove move : opposingPiece.legalMoves(board)){
+					if(!result.containsKey(move.destinationRow)) {
+						result.put(move.destinationRow, new HashSet<Integer>());
+					}
+					result.get(move.destinationRow).add(move.destinationColumn);
+				}
+			} else {
+				//deal with pawn moves not being all offensive
+			}
+		}
+		return result;
 	}
 }
