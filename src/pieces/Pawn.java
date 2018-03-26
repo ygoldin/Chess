@@ -38,6 +38,7 @@ public class Pawn implements ChessPiece {
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		int myRow = myLocation[0];
 		int myCol = myLocation[1];
+		//TODO: add taking moves
 		if(isWhite) {
 			if(board.isInBounds(myRow - 1, myCol) && board.getPieceAtSpot(myRow - 1, myCol) == null) {
 				moves.add(new PieceMove(myRow - 1, myCol));
@@ -46,7 +47,12 @@ public class Pawn implements ChessPiece {
 				}
 			}
 		} else { //black
-			
+			if(board.isInBounds(myRow + 1, myCol) && board.getPieceAtSpot(myRow + 1, myCol) == null) {
+				moves.add(new PieceMove(myRow + 1, myCol));
+				if(board.isInBounds(myRow + 2, myCol) && board.getPieceAtSpot(myRow + 2, myCol) == null) {
+					moves.add(new PieceMove(myRow + 2, myCol));
+				}
+			}
 		}
 		return moves;
 	}
