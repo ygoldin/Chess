@@ -37,9 +37,7 @@ public class Bishop implements ChessPiece {
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
-		int myRow = myLocation[0];
-		int myCol = myLocation[1];
-		diagonalMoves(myRow, myCol, isWhite, board, moves);
+		diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		return moves;
 	}
 	
@@ -70,11 +68,11 @@ public class Bishop implements ChessPiece {
 				moves.add(new PieceMove(curRow, curCol));
 				curRow += rowDirection;
 				curCol += colDirection;
-			} else {
+			} else { //there's another piece, you can't move past it
 				if(otherPiece.isWhite() != pieceIsWhite) { //can take it
 					moves.add(new PieceMove(curRow, curCol, otherPiece));
 				}
-				break; //if there's another piece, you can't move past it
+				break;
 			}
 		}
 	}
