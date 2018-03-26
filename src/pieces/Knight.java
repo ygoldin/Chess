@@ -16,13 +16,18 @@ public class Knight implements ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "knight";
-	}
-
-	@Override
 	public boolean isWhite() {
 		return isWhite;
+	}
+	
+	@Override
+	public String toString() {
+		String type = "knight";
+		if(isWhite) {
+			return "w " + type;
+		} else {
+			return "b " + type;
+		}
 	}
 
 	@Override

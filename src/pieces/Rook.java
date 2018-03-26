@@ -17,13 +17,18 @@ public class Rook implements ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "rook";
-	}
-
-	@Override
 	public boolean isWhite() {
 		return isWhite;
+	}
+	
+	@Override
+	public String toString() {
+		String type = "rook";
+		if(isWhite) {
+			return "w " + type;
+		} else {
+			return "b " + type;
+		}
 	}
 
 	@Override

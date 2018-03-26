@@ -16,13 +16,18 @@ public class King implements ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "king";
-	}
-
-	@Override
 	public boolean isWhite() {
 		return isWhite;
+	}
+	
+	@Override
+	public String toString() {
+		String type = "king";
+		if(isWhite) {
+			return "w " + type;
+		} else {
+			return "b " + type;
+		}
 	}
 
 	@Override

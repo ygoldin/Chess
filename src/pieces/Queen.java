@@ -16,13 +16,18 @@ public class Queen implements ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "queen";
-	}
-
-	@Override
 	public boolean isWhite() {
 		return isWhite;
+	}
+	
+	@Override
+	public String toString() {
+		String type = "queen";
+		if(isWhite) {
+			return "w " + type;
+		} else {
+			return "b " + type;
+		}
 	}
 
 	@Override

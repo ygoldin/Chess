@@ -16,13 +16,18 @@ public class Bishop implements ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "bishop";
-	}
-
-	@Override
 	public boolean isWhite() {
 		return isWhite;
+	}
+	
+	@Override
+	public String toString() {
+		String type = "bishop";
+		if(isWhite) {
+			return "w " + type;
+		} else {
+			return "b " + type;
+		}
 	}
 
 	@Override
