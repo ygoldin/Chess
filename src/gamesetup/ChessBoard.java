@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pieces.ChessPiece;
+import pieces.*;
 
 public class ChessBoard {
 	public static final int SIZE = 8;
@@ -15,6 +15,7 @@ public class ChessBoard {
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
 	private boolean curPlayerInCheck;
+	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
 	private Set<ChessPiece> doubleJumpPawns;
 	
 	public ChessBoard() {
@@ -87,7 +88,10 @@ public class ChessBoard {
 	 * @return The piece taken during this move, or null if no piece was taken
 	 */
 	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
-		//TODO: make sure to clear en passant and check for kings in check
+		//TODO: make sure to:
+		//clear en passant
+		//check for kings in check
+		//check if a move puts a king in check (by the moved piece or any other piece)
 		return null;
 	}
 	
@@ -127,5 +131,36 @@ public class ChessBoard {
 	 */
 	public boolean curPlayerIsInCheck() {
 		return curPlayerInCheck;
+	}
+	
+	/**
+	 * checks if a piece is causing the opponent's king to be in check
+	 * 
+	 * @return the piece causing check if the opponent is in check, null otherwise
+	 */
+	public ChessPiece pieceCausingCheck() {
+		return pieceCausingCheck;
+	}
+	
+	/**
+	 * finds the location of the team's king
+	 * 
+	 * @param isWhite whether the client is looking for the white or black team's king
+	 * @return the location of the king, in the form [row, column]
+	 * @throws IllegalStateException if the king doesn't exist
+	 */
+	public Integer[] locationOfKing(boolean isWhite) {
+		Map<ChessPiece, Integer[]> team;
+		if(isWhite) {
+			team = whitePieces;
+		} else {
+			team = blackPieces;
+		}
+		for(ChessPiece piece : team.keySet()) {
+			if(piece instanceof King) {
+				return getSpotOfPiece(piece);
+			}
+		}
+		throw new IllegalStateException("king doesn't exist");
 	}
 }
