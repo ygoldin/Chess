@@ -19,19 +19,47 @@ public class ChessBoard {
 	private Set<ChessPiece> doubleJumpPawns;
 	
 	public ChessBoard() {
+		board = new ChessPiece[SIZE][SIZE];
 		whitePieces = initializeTeamPieces(true);
 		blackPieces = initializeTeamPieces(false);
-		board = new ChessPiece[SIZE][SIZE];
-		//add pieces to board
 		whiteTurn = true;
 		doubleJumpPawns = new HashSet<>();
 	}
 	
 	//sets up the pieces for the given team at the start of the game
 	private Map<ChessPiece, Integer[]> initializeTeamPieces(boolean isWhite) {
-		Map<ChessPiece, Integer[]> pieces = new HashMap<>();
-		
-		return pieces;
+		Map<ChessPiece, Integer[]> teamPieces = new HashMap<>();
+		int pawnRow;
+		int otherPiecesRow;
+		if(isWhite) {
+			pawnRow = SIZE - 2;
+			otherPiecesRow = SIZE - 1;
+		} else {
+			pawnRow = 1;
+			otherPiecesRow = 0;
+		}
+		//creates pieces for the team
+		for(int curCol = 0; curCol < SIZE; curCol++) {
+			teamPieces.put(new Pawn(isWhite), new Integer[] {pawnRow, curCol});
+		}
+		int inFromBoundary = 0;
+		teamPieces.put(new Rook(isWhite), new Integer[] {otherPiecesRow, inFromBoundary});
+		teamPieces.put(new Rook(isWhite), new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary});
+		inFromBoundary++;
+		teamPieces.put(new Knight(isWhite), new Integer[] {otherPiecesRow, inFromBoundary});
+		teamPieces.put(new Knight(isWhite), new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary});
+		inFromBoundary++;
+		teamPieces.put(new Bishop(isWhite), new Integer[] {otherPiecesRow, inFromBoundary});
+		teamPieces.put(new Bishop(isWhite), new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary});
+		inFromBoundary++;
+		teamPieces.put(new Queen(isWhite), new Integer[] {otherPiecesRow, inFromBoundary});
+		teamPieces.put(new King(isWhite), new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary});
+		//puts pieces on the board
+		for(ChessPiece piece : teamPieces.keySet()) {
+			Integer[] location = teamPieces.get(piece);
+			board[location[0]][location[1]] = piece;
+		}
+		return teamPieces;
 	}
 	
 	/**
