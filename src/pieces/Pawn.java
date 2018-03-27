@@ -44,7 +44,7 @@ public class Pawn extends ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(isTeamsTurn(board)) {
+		if(isTeamsTurn(board) && !isPreventingCheck(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			int myRow = myLocation[0];
 			int myCol = myLocation[1];

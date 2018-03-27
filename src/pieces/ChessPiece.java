@@ -91,4 +91,25 @@ public abstract class ChessPiece {
 			}
 		}
 	}
+	
+	/**
+	 * checks if this piece is preventing a check on its king (it can't move if that's true)
+	 * 
+	 * @param board The board the piece is on
+	 * @return true if it is preventing check, false otherwise
+	 */
+	protected boolean isPreventingCheck(ChessBoard board) {
+		return false;
+	}
+	
+	/**
+	 * retains the moves that will keep the piece in the line of fire of a possible check
+	 * does nothing if there is no opposing piece that could be checking the king if this piece moved
+	 * 
+	 * @param moves The possible legal moves of the piece without considering check
+	 * @param board The board on which the check occurred
+	 */
+	protected static void leaveMovesThatRemainInLineOfFire(Set<PieceMove> moves, ChessBoard board) {
+		
+	}
 }
