@@ -80,9 +80,10 @@ public class ChessBoard {
 		}
 		Map<ChessPiece, Map<Integer, Set<Integer>>> linesOfFire = new HashMap<>();
 		for(ChessPiece opposingPiece : opposingTeamPieces.keySet()) {
-			Map<Integer, Set<Integer>> lineOfFire = spotsBetweenOpposingPieceAndCurrentKing(opposingPiece);
-			if(lineOfFire != null) {
-				linesOfFire.put(opposingPiece, lineOfFire);
+			Map<Integer, Set<Integer>> spotsInLineOfFire =
+					spotsBetweenOpposingPieceAndCurrentKing(opposingPiece);
+			if(spotsInLineOfFire != null) {
+				linesOfFire.put(opposingPiece, spotsInLineOfFire);
 			}
 		}
 		
@@ -121,8 +122,34 @@ public class ChessBoard {
 				opposingPiece instanceof King) {
 			return null;
 		}
+		Integer[] pieceLocation = getSpotOfPiece(opposingPiece);
+		int attackingRow = pieceLocation[0];
+		int attackingCol = pieceLocation[1];
+		int kingRow = currentTeamsKingLocation[0];
+		int kingCol = currentTeamsKingLocation[1];
+		int spotsToLookAt = Math.abs(kingRow - attackingRow - 1);
 		Map<Integer, Set<Integer>> result = new HashMap<>();
+		result.put(attackingRow, new HashSet<>());
+		result.get(attackingRow).add(attackingCol);
+		if(opposingPiece instanceof Bishop || (opposingPiece instanceof Queen && attackingRow != kingRow &&
+				attackingCol != kingCol)) {
+			addDiagonalToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt, result);
+		} else {
+			addStraightToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt, result);
+		}
 		
+		int[] spotInLineOfFire = null;
+		for(int row : result.keySet()) {
+			for(int col : result.get(row)) {
+				if(opposingPiece.isSameTeam(getPieceAtSpot(row, col))) {
+					return null;
+				} else if(spotInLineOfFire == null) { //first "defender" found
+					spotInLineOfFire = new int[] {row, col};
+				} else { //multiple "defenders" found, so there is no immediate threat
+					return null;
+				}
+			}
+		}
 		return result;
 	}
 	
