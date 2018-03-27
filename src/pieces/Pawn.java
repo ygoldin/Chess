@@ -57,7 +57,8 @@ public class Pawn implements ChessPiece {
 			}
 			//move forward one/two spots
 			int oneRowForward = myRow + direction;
-			if(board.isInBounds(oneRowForward, myCol) && board.getPieceAtSpot(oneRowForward, myCol) == null) {
+			if(board.isInBounds(oneRowForward, myCol) &&
+					board.getPieceAtSpot(oneRowForward, myCol) == null) {
 				moves.add(new PieceMove(oneRowForward, myCol));
 				int twoRowsForward = oneRowForward + direction;
 				if(!hasMoved && board.isInBounds(twoRowsForward, myCol) &&
@@ -92,7 +93,7 @@ public class Pawn implements ChessPiece {
 			int direction) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece != null && otherPiece.isWhite() != isWhite &&
+			if(otherPiece != null && otherPiece.isWhite() != isWhite && otherPiece instanceof Pawn &&
 					board.pawnsForEnPassant().contains(otherPiece)) {
 				moves.add(new PieceMove(curRow + direction, curCol, otherPiece));
 			}

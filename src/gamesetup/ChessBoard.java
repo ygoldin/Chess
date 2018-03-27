@@ -143,15 +143,26 @@ public class ChessBoard {
 	}
 	
 	/**
-	 * finds the location of the team's king
+	 * finds all of the spots on the board that other pieces could move to, to block the "check"
 	 * 
-	 * @param isWhite whether the client is looking for the white or black team's king
-	 * @return the location of the king, in the form [row, column]
-	 * @throws IllegalStateException if the king doesn't exist
+	 * @return a map from rows to columns of spots on the board in the line of fire (including the
+	 * attacking piece). Will be null if the current player is not in check 
 	 */
-	public Integer[] locationOfKing(boolean isWhite) {
+	public Map<Integer, Integer> inCheckLineOfFire() {
+		if(!curPlayerInCheck) {
+			return null;
+		}
+		Integer[] kingLocation = locationOfKing(whiteTurn);
+		Integer[] attackingPieceLocation = getSpotOfPiece(pieceCausingCheck);
+		Map<Integer, Integer> spotsInLineOfFire = new HashMap<>();
+		//TODO
+		return spotsInLineOfFire;
+	}
+	
+	//finds the location of the "in check" king
+	private Integer[] locationOfKing(boolean isWhiteTurn) {
 		Map<ChessPiece, Integer[]> team;
-		if(isWhite) {
+		if(isWhiteTurn) {
 			team = whitePieces;
 		} else {
 			team = blackPieces;
