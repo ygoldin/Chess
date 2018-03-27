@@ -39,6 +39,9 @@ public abstract class ChessPiece {
 	 * @param board The chess board the piece is on
 	 * @return a set of all of the moves the piece can make: will be empty if it's not the turn
 	 * of this piece's team or no legal moves can be made
+	 * NOTE: this accounts for if the king is in check, only moves to go protect him can be made
+	 * NOTE: this does not account for whether the piece is currently protecting the king from a
+	 * possible check
 	 */
 	public abstract Set<PieceMove> legalMoves(ChessBoard board);
 	
@@ -97,27 +100,6 @@ public abstract class ChessPiece {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * checks if this piece is preventing a check on its king (it can't move if that's true)
-	 * 
-	 * @param board The board the piece is on
-	 * @return true if it is preventing check, false otherwise
-	 */
-	protected boolean isPreventingCheck(ChessBoard board) {
-		return false;
-	}
-	
-	/**
-	 * retains the moves that will keep the piece in the line of fire of a possible check
-	 * does nothing if there is no opposing piece that could be checking the king if this piece moved
-	 * 
-	 * @param moves The possible legal moves of the piece without considering check
-	 * @param board The board on which the check occurred
-	 */
-	protected static void leaveMovesThatRemainInLineOfFire(Set<PieceMove> moves, ChessBoard board) {
-		
 	}
 	
 	@Override

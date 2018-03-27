@@ -46,9 +46,6 @@ public class Rook extends ChessPiece {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 			leaveMovesThatStopCheck(moves, board);
-			if(isPreventingCheck(board)) {
-				leaveMovesThatRemainInLineOfFire(moves, board);
-			}
 		}
 		return moves;
 	}

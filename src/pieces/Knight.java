@@ -41,7 +41,7 @@ public class Knight extends ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(isTeamsTurn(board) && !isPreventingCheck(board)) {
+		if(isTeamsTurn(board)) {
 			int[] firstDirection = new int[] {1, -1};
 			int[] secondDirection = new int[] {2, -2};
 			Integer[] myLocation = board.getSpotOfPiece(this);
