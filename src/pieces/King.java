@@ -66,12 +66,23 @@ public class King implements ChessPiece {
 					}
 				}
 			}
-			//TODO: check if you can castle
+			//check if the king can castle
+			if(!hasMoved && !board.curPlayerIsInCheck()) { //can't castle if king has moved/is in check
+				if(canCastle(myRow, 0, myCol - 2, myCol - 1, board, illegalMoves)) { //castle left
+					moves.add(new PieceMove(myRow, myCol - 2));
+				}
+				if(canCastle(myRow, ChessBoard.SIZE - 1, myCol + 1, ChessBoard.SIZE - 2, board,
+						illegalMoves)) { //castle right
+					moves.add(new PieceMove(myRow, myCol + 2));
+				}
+			}
 		}
 		return moves;
 	}
 	
 	//returns a map from rows to columns of moves that would put the king in a line of fire
+	//not all are necessarily reachable for the king at this point in the game, but that doesn't affect
+	//the final outcome since the king just needs to know where it can't go, not where it can
 	private Map<Integer, Set<Integer>> movesIntoALineOfFire(ChessBoard board) {
 		Map<ChessPiece, Integer[]> otherTeam = board.getAllPieces(!isWhite);
 		Map<Integer, Set<Integer>> result = new HashMap<>();
@@ -102,6 +113,24 @@ public class King implements ChessPiece {
 			}
 		}
 		return result;
+	}
+	
+	//checks if you can castle with the given rook
+	//the rook couldn't have moved before and there can be no pieces in the way
+	//the king can't move through/land on a square that would put it in check
+	private boolean canCastle(int myRow, int possibleRookColumn, int columnCheckStart, int columnCheckEnd,
+			ChessBoard board, Map<Integer, Set<Integer>> illegalMoves) {
+		ChessPiece possibleRook = board.getPieceAtSpot(myRow, possibleRookColumn);
+		if(possibleRook instanceof Rook && possibleRook.isWhite() == isWhite && !possibleRook.hasMoved()) {
+			for(int curCol = columnCheckStart; curCol < columnCheckEnd; curCol++) {
+				if(board.getPieceAtSpot(myRow, curCol) != null || (illegalMoves.containsKey(myRow)
+						&& illegalMoves.get(myRow).contains(curCol))) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override

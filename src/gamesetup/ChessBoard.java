@@ -9,7 +9,7 @@ import java.util.Set;
 import pieces.ChessPiece;
 
 public class ChessBoard {
-	private static final int SIZE = 8;
+	public static final int SIZE = 8;
 	private Map<ChessPiece, Integer[]> whitePieces;
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
