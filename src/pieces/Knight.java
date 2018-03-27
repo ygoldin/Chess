@@ -73,7 +73,7 @@ public class Knight implements ChessPiece {
 	}
 	
 	@Override
-	public boolean hasNeverMoved() {
+	public boolean hasMoved() {
 		return hasMoved;
 	}
 

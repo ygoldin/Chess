@@ -37,7 +37,7 @@ public interface ChessPiece {
 	 * 
 	 * @return true if it has never moved, false otherwise
 	 */
-	public boolean hasNeverMoved();
+	public boolean hasMoved();
 	
 	/**
 	 * marks that the piece has moved

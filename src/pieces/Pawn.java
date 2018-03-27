@@ -100,7 +100,7 @@ public class Pawn implements ChessPiece {
 	}
 	
 	@Override
-	public boolean hasNeverMoved() {
+	public boolean hasMoved() {
 		return hasMoved;
 	}
 
