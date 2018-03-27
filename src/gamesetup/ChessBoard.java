@@ -14,8 +14,7 @@ public class ChessBoard {
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
-	private boolean whiteInCheck;
-	private boolean blackInCheck;
+	private boolean curPlayerInCheck;
 	private Set<ChessPiece> doubleJumpPawns;
 	
 	public ChessBoard() {
@@ -122,20 +121,11 @@ public class ChessBoard {
 	}
 	
 	/**
-	 * checks if the white king is in check
+	 * checks if the king of the current player is in check
 	 * 
 	 * @return true if he is, false otherwise
 	 */
-	public boolean whiteIsInCheck() {
-		return whiteInCheck;
-	}
-	
-	/**
-	 * checks if the black king is in check
-	 * 
-	 * @return true if he is, false otherwise
-	 */
-	public boolean blackIsInCheck() {
-		return blackInCheck;
+	public boolean curPlayerIsInCheck() {
+		return curPlayerInCheck;
 	}
 }

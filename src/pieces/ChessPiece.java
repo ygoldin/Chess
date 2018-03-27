@@ -27,7 +27,8 @@ public interface ChessPiece {
 	 * finds all of the moves this piece can make
 	 * 
 	 * @param board The chess board the piece is on
-	 * @return a set of all of the moves the piece can make
+	 * @return a set of all of the moves the piece can make: will be empty if it's not the turn
+	 * of this piece's team or no legal moves can be made
 	 */
 	public Set<PieceMove> legalMoves(ChessBoard board);
 }

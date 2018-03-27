@@ -44,32 +44,34 @@ public class Pawn implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		Integer[] myLocation = board.getSpotOfPiece(this);
-		int myRow = myLocation[0];
-		int myCol = myLocation[1];
-		int direction;
-		if(isWhite) {
-			direction = -1;
-		} else {
-			direction = 1;
-		}
-		//move forward one/two spots
-		int oneRowForward = myRow + direction;
-		if(board.isInBounds(oneRowForward, myCol) && board.getPieceAtSpot(oneRowForward, myCol) == null) {
-			moves.add(new PieceMove(oneRowForward, myCol));
-			int twoRowsForward = oneRowForward + direction;
-			if(board.isInBounds(twoRowsForward, myCol) &&
-					board.getPieceAtSpot(twoRowsForward, myCol) == null) {
-				moves.add(new PieceMove(twoRowsForward, myCol));
+		if(board.isWhiteTurn() == isWhite) {
+			Integer[] myLocation = board.getSpotOfPiece(this);
+			int myRow = myLocation[0];
+			int myCol = myLocation[1];
+			int direction;
+			if(isWhite) {
+				direction = -1;
+			} else {
+				direction = 1;
 			}
-		}
-		//check if you can take a piece diagonally to the left, then right
-		checkTakingDiagonally(oneRowForward, myCol - 1, board, moves);
-		checkTakingDiagonally(oneRowForward, myCol + 1, board, moves);
-		//check if you can perform en passant
-		if(!board.pawnsForEnPassant().isEmpty()) {
-			checkEnPassant(myRow, myCol - 1, board, moves, direction);
-			checkEnPassant(myRow, myCol + 1, board, moves, direction);
+			//move forward one/two spots
+			int oneRowForward = myRow + direction;
+			if(board.isInBounds(oneRowForward, myCol) && board.getPieceAtSpot(oneRowForward, myCol) == null) {
+				moves.add(new PieceMove(oneRowForward, myCol));
+				int twoRowsForward = oneRowForward + direction;
+				if(board.isInBounds(twoRowsForward, myCol) &&
+						board.getPieceAtSpot(twoRowsForward, myCol) == null) {
+					moves.add(new PieceMove(twoRowsForward, myCol));
+				}
+			}
+			//check if you can take a piece diagonally to the left, then right
+			checkTakingDiagonally(oneRowForward, myCol - 1, board, moves);
+			checkTakingDiagonally(oneRowForward, myCol + 1, board, moves);
+			//check if you can perform en passant
+			if(!board.pawnsForEnPassant().isEmpty()) {
+				checkEnPassant(myRow, myCol - 1, board, moves, direction);
+				checkEnPassant(myRow, myCol + 1, board, moves, direction);
+			}
 		}
 		return moves;
 	}

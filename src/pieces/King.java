@@ -47,22 +47,25 @@ public class King implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		Integer[] myLocation = board.getSpotOfPiece(this);
-		int myRow = myLocation[0];
-		int myCol = myLocation[1];
-		Map<Integer, Set<Integer>> illegalMoves = movesIntoALineOfFire(board);
-		for(int curRow = myRow - 1; curRow <= myRow + 1; curRow++) {
-			for(int curCol = myCol - 1; curCol <= myCol + 1; curCol++) {
-				//first check for not staying still, going out of bounds, or going into a line of fire
-				if((curRow != myRow || curCol != myCol) && board.isInBounds(curRow, curCol) &&
-						(!illegalMoves.containsKey(curRow) ||
-						!illegalMoves.get(curRow).contains(curCol))) {
-					ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-					if(otherPiece == null || otherPiece.isWhite() != isWhite) {
-						moves.add(new PieceMove(curRow, curCol, otherPiece));
+		if(board.isWhiteTurn() == isWhite) {
+			Integer[] myLocation = board.getSpotOfPiece(this);
+			int myRow = myLocation[0];
+			int myCol = myLocation[1];
+			Map<Integer, Set<Integer>> illegalMoves = movesIntoALineOfFire(board);
+			for(int curRow = myRow - 1; curRow <= myRow + 1; curRow++) {
+				for(int curCol = myCol - 1; curCol <= myCol + 1; curCol++) {
+					//first check for not staying still, going out of bounds, or going into a line of fire
+					if((curRow != myRow || curCol != myCol) && board.isInBounds(curRow, curCol) &&
+							(!illegalMoves.containsKey(curRow) ||
+							!illegalMoves.get(curRow).contains(curCol))) {
+						ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+						if(otherPiece == null || otherPiece.isWhite() != isWhite) {
+							moves.add(new PieceMove(curRow, curCol, otherPiece));
+						}
 					}
 				}
 			}
+			//TODO: check if you can castle
 		}
 		return moves;
 	}

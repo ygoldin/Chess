@@ -46,8 +46,10 @@ public class Rook implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		Integer[] myLocation = board.getSpotOfPiece(this);
-		straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		if(board.isWhiteTurn() == isWhite) {
+			Integer[] myLocation = board.getSpotOfPiece(this);
+			straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		}
 		return moves;
 	}
 	
