@@ -152,11 +152,67 @@ public class ChessBoard {
 		if(!curPlayerInCheck) {
 			return null;
 		}
-		Integer[] kingLocation = locationOfInCheckKing();
 		Integer[] attackingPieceLocation = getSpotOfPiece(pieceCausingCheck);
+		int attackingRow = attackingPieceLocation[0];
+		int attackingCol = attackingPieceLocation[1];
 		Map<Integer, Set<Integer>> spotsInLineOfFire = new HashMap<>();
-		//TODO
+		//add location of piece causing check
+		spotsInLineOfFire.put(attackingRow, new HashSet<>());
+		spotsInLineOfFire.get(attackingRow).add(attackingCol);
+		if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen ||
+				pieceCausingCheck instanceof Rook) {
+			//pawns and knights can only attack directly so there is no line of fire
+			Integer[] kingLocation = locationOfInCheckKing();
+			int kingRow = kingLocation[0];
+			int kingCol = kingLocation[1];
+			int spotsToLookAt = Math.abs(kingRow - attackingRow) - 1;
+			if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen) {
+				if(attackingRow < kingRow) {
+					if(attackingCol < kingCol) {
+						addToLineOfFire(attackingRow, attackingCol, 1, 1, spotsToLookAt,
+								spotsInLineOfFire);
+					} else {
+						addToLineOfFire(attackingRow, attackingCol, 1, -1, spotsToLookAt,
+								spotsInLineOfFire);
+					}
+				} else {
+					if(attackingCol < kingCol) {
+						addToLineOfFire(attackingRow, attackingCol, -1, 1, spotsToLookAt,
+								spotsInLineOfFire);
+					} else {
+						addToLineOfFire(attackingRow, attackingCol, -1, -1, spotsToLookAt,
+								spotsInLineOfFire);
+					}
+				}
+			}
+			if(pieceCausingCheck instanceof Rook || pieceCausingCheck instanceof Queen) {
+				if(attackingRow < kingRow) {
+					addToLineOfFire(attackingRow, attackingCol, 1, 0, spotsToLookAt,
+							spotsInLineOfFire);
+				} else if(attackingRow > kingRow) {
+					addToLineOfFire(attackingRow, attackingCol, -1, 0, spotsToLookAt,
+							spotsInLineOfFire);
+				} else if(attackingCol < kingCol) {
+					addToLineOfFire(attackingRow, attackingCol, 0, 1, spotsToLookAt,
+							spotsInLineOfFire);
+				} else { //attackingCol > kingCol
+					addToLineOfFire(attackingRow, attackingCol, 0, -1, spotsToLookAt,
+							spotsInLineOfFire);
+				}
+			}
+		}
 		return spotsInLineOfFire;
+	}
+	
+	private void addToLineOfFire(int startingRow, int startingCol, int rowChange, int colChange,
+			int spotsToLookAt, Map<Integer, Set<Integer>> spotsInLineOfFire) {
+		for(int i = 1; i <= spotsToLookAt; i++) {
+			int attackingRow = startingRow + rowChange*i;
+			if(!spotsInLineOfFire.containsKey(attackingRow)) {
+				spotsInLineOfFire.put(attackingRow, new HashSet<>());
+			}
+			spotsInLineOfFire.get(attackingRow).add(startingCol + colChange*i);
+		}
 	}
 	
 	//finds the location of the "in check" king
