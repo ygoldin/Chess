@@ -127,6 +127,19 @@ public class ChessBoard {
 		int attackingCol = pieceLocation[1];
 		int kingRow = currentTeamsKingLocation[0];
 		int kingCol = currentTeamsKingLocation[1];
+		//pieces can only possibly have a line of fire if they're in the right position
+		//so a bishop is diagonally away, a rook is in a straight line, and a queen is one of those
+		if(opposingPiece instanceof Bishop && Math.abs(attackingRow - kingRow) !=
+				Math.abs(attackingCol - kingCol)) {
+			return null;
+		} else if(opposingPiece instanceof Rook && attackingRow != kingRow && attackingCol != kingCol) {
+			return null;
+		} else if(opposingPiece instanceof Queen &&
+				Math.abs(attackingRow - kingRow) != Math.abs(attackingCol - kingCol) &&
+				attackingRow != kingRow && attackingCol != kingCol) {
+			return null;
+		}
+		//now the piece is confirmed to be in the right position for a possible line of fire
 		int spotsToLookAt = Math.abs(kingRow - attackingRow - 1);
 		Map<Integer, Set<Integer>> result = new HashMap<>();
 		result.put(attackingRow, new HashSet<>());
