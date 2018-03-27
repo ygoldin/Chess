@@ -4,10 +4,19 @@ import java.util.HashSet;
 import java.util.Set;
 import gamesetup.*;
 
+/**
+ * this class represents a pawn in a game of chess
+ * @author Yael Goldin
+ */
 public class Pawn implements ChessPiece {
 	private static final int VALUE = 1;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a pawn of the given team
+	 * 
+	 * @param isWhite whether the pawn is for the white team (true) or black (false)
+	 */
 	public Pawn(boolean isWhite) {
 		this.isWhite = isWhite;
 	}

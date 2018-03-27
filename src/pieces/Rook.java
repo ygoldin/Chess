@@ -6,10 +6,19 @@ import java.util.Set;
 import gamesetup.ChessBoard;
 import gamesetup.PieceMove;
 
+/**
+ * this class represents a rook in a game of chess
+ * @author Yael Goldin
+ */
 public class Rook implements ChessPiece {
 	private static final int VALUE = 5;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a rook of the given team
+	 * 
+	 * @param isWhite whether the rook is for the white team (true) or black (false)
+	 */
 	public Rook(boolean isWhite) {
 		this.isWhite = isWhite;
 	}

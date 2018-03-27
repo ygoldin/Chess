@@ -5,10 +5,19 @@ import java.util.Set;
 
 import gamesetup.*;
 
+/**
+ * this class represents a bishop in a game of chess
+ * @author Yael Goldin
+ */
 public class Bishop implements ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a bishop of the given team
+	 * 
+	 * @param isWhite whether the bishop is for the white team (true) or black (false)
+	 */
 	public Bishop(boolean isWhite) {
 		this.isWhite = isWhite;
 	}

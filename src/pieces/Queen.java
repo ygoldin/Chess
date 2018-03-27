@@ -5,10 +5,19 @@ import java.util.Set;
 
 import gamesetup.*;
 
+/**
+ * this class represents a queen in a game of chess
+ * @author Yael Goldin
+ */
 public class Queen implements ChessPiece {
 	private static final int VALUE = 8;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a queen of the given team
+	 * 
+	 * @param isWhite whether the queen is for the white team (true) or black (false)
+	 */
 	public Queen(boolean isWhite) {
 		this.isWhite = isWhite;
 	}

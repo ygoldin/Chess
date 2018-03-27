@@ -5,10 +5,19 @@ import java.util.Set;
 
 import gamesetup.*;
 
+/**
+ * this class represents a knight in a game of chess
+ * @author Yael Goldin
+ */
 public class Knight implements ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a knight of the given team
+	 * 
+	 * @param isWhite whether the knight is for the white team (true) or black (false)
+	 */
 	public Knight(boolean isWhite) {
 		this.isWhite = isWhite;
 	}
