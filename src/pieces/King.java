@@ -7,10 +7,19 @@ import java.util.Set;
 
 import gamesetup.*;
 
+/**
+ * this class represents a king in a game of chess
+ * @author Yael Goldin
+ */
 public class King implements ChessPiece {
 	private static final int VALUE = 0;
 	private final boolean isWhite;
 	
+	/**
+	 * constructs a king of the given team
+	 * 
+	 * @param isWhite whether the king is for the white team (true) or black (false)
+	 */
 	public King(boolean isWhite) {
 		this.isWhite = isWhite;
 	}
@@ -72,14 +81,13 @@ public class King implements ChessPiece {
 				}
 			} else {
 				//only diagonal "taking" is the line of fire for pawns
-				int direction;
-				if(isWhite) { //pawn is black
-					direction = 1;
-				} else { //pawn is white
-					direction = -1;
-				}
 				Integer[] pawnLocation = board.getSpotOfPiece(opposingPiece);
-				int pawnAttackRow = pawnLocation[0] + direction;
+				int pawnAttackRow;
+				if(isWhite) { //pawn is black
+					pawnAttackRow = pawnLocation[0] + 1;
+				} else { //pawn is white
+					pawnAttackRow = pawnLocation[0] - 1;
+				}
 				if(!result.containsKey(pawnAttackRow)) {
 					result.put(pawnAttackRow, new HashSet<Integer>());
 				}
