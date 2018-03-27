@@ -37,16 +37,6 @@ public class Queen extends ChessPiece {
 	public boolean isWhite() {
 		return isWhite;
 	}
-	
-	@Override
-	public String toString() {
-		String type = "queen";
-		if(isWhite) {
-			return "w " + type;
-		} else {
-			return "b " + type;
-		}
-	}
 
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {

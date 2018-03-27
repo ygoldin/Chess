@@ -11,7 +11,7 @@ import gamesetup.*;
  */
 public class Bishop extends ChessPiece {
 	private static final int VALUE = 3;
-	private static final String SYMBOL = "K";
+	private static final String SYMBOL = "B";
 	private final boolean isWhite;
 	
 	/**
