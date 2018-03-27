@@ -110,6 +110,16 @@ public class ChessBoard {
 	
 	private ChessPiece inPossibleLineOfFire(ChessPiece defender,
 			Map<ChessPiece, Map<Integer, Set<Integer>>> linesOfFire) {
+		Integer[] defenderLocation = getSpotOfPiece(defender);
+		int defenderRow = defenderLocation[0];
+		int defenderCol = defenderLocation[1];
+		for(ChessPiece lineOfFireCauser : linesOfFire.keySet()) {
+			Map<Integer, Set<Integer>> spotsInLineOfFire = linesOfFire.get(lineOfFireCauser);
+			if(spotsInLineOfFire.containsKey(defenderRow) &&
+					spotsInLineOfFire.get(defenderRow).contains(defenderCol)) {
+				return lineOfFireCauser;
+			}
+		}
 		return null;
 	}
 	
