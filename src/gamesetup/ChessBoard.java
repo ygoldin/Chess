@@ -166,11 +166,18 @@ public class ChessBoard {
 			int kingRow = kingLocation[0];
 			int kingCol = kingLocation[1];
 			int spotsToLookAt = Math.abs(kingRow - attackingRow) - 1;
-			if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen) {
+			if(pieceCausingCheck instanceof Queen) {
+				if(attackingRow == kingRow || attackingCol == kingCol) { //attacking like a rook
+					addStraightToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
+							spotsInLineOfFire);
+				} else { //attacking like a bishop
+					addDiagonalToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
+							spotsInLineOfFire);
+				}
+			} else if(pieceCausingCheck instanceof Bishop) {
 				addDiagonalToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
 						spotsInLineOfFire);
-			}
-			if(pieceCausingCheck instanceof Rook || pieceCausingCheck instanceof Queen) {
+			} else { //rook
 				addStraightToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
 						spotsInLineOfFire);
 			}
