@@ -167,52 +167,15 @@ public class ChessBoard {
 			int kingCol = kingLocation[1];
 			int spotsToLookAt = Math.abs(kingRow - attackingRow) - 1;
 			if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen) {
-				if(attackingRow < kingRow) {
-					if(attackingCol < kingCol) {
-						addToLineOfFire(attackingRow, attackingCol, 1, 1, spotsToLookAt,
-								spotsInLineOfFire);
-					} else {
-						addToLineOfFire(attackingRow, attackingCol, 1, -1, spotsToLookAt,
-								spotsInLineOfFire);
-					}
-				} else {
-					if(attackingCol < kingCol) {
-						addToLineOfFire(attackingRow, attackingCol, -1, 1, spotsToLookAt,
-								spotsInLineOfFire);
-					} else {
-						addToLineOfFire(attackingRow, attackingCol, -1, -1, spotsToLookAt,
-								spotsInLineOfFire);
-					}
-				}
+				addDiagonalToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
+						spotsInLineOfFire);
 			}
 			if(pieceCausingCheck instanceof Rook || pieceCausingCheck instanceof Queen) {
-				if(attackingRow < kingRow) {
-					addToLineOfFire(attackingRow, attackingCol, 1, 0, spotsToLookAt,
-							spotsInLineOfFire);
-				} else if(attackingRow > kingRow) {
-					addToLineOfFire(attackingRow, attackingCol, -1, 0, spotsToLookAt,
-							spotsInLineOfFire);
-				} else if(attackingCol < kingCol) {
-					addToLineOfFire(attackingRow, attackingCol, 0, 1, spotsToLookAt,
-							spotsInLineOfFire);
-				} else { //attackingCol > kingCol
-					addToLineOfFire(attackingRow, attackingCol, 0, -1, spotsToLookAt,
-							spotsInLineOfFire);
-				}
+				addStraightToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt,
+						spotsInLineOfFire);
 			}
 		}
 		return spotsInLineOfFire;
-	}
-	
-	private void addToLineOfFire(int startingRow, int startingCol, int rowChange, int colChange,
-			int spotsToLookAt, Map<Integer, Set<Integer>> spotsInLineOfFire) {
-		for(int i = 1; i <= spotsToLookAt; i++) {
-			int attackingRow = startingRow + rowChange*i;
-			if(!spotsInLineOfFire.containsKey(attackingRow)) {
-				spotsInLineOfFire.put(attackingRow, new HashSet<>());
-			}
-			spotsInLineOfFire.get(attackingRow).add(startingCol + colChange*i);
-		}
 	}
 	
 	//finds the location of the "in check" king
@@ -229,5 +192,57 @@ public class ChessBoard {
 			}
 		}
 		throw new IllegalStateException("king doesn't exist");
+	}
+	
+	//adds to the line of fire in the diagonal attack
+	private void addDiagonalToLineOfFire(int attackingRow, int attackingCol, int kingRow, int kingCol,
+			int spotsToLookAt, Map<Integer, Set<Integer>> spotsInLineOfFire) {
+		if(attackingRow < kingRow) {
+			if(attackingCol < kingCol) {
+				addToLineOfFire(attackingRow, attackingCol, 1, 1, spotsToLookAt,
+						spotsInLineOfFire);
+			} else {
+				addToLineOfFire(attackingRow, attackingCol, 1, -1, spotsToLookAt,
+						spotsInLineOfFire);
+			}
+		} else {
+			if(attackingCol < kingCol) {
+				addToLineOfFire(attackingRow, attackingCol, -1, 1, spotsToLookAt,
+						spotsInLineOfFire);
+			} else {
+				addToLineOfFire(attackingRow, attackingCol, -1, -1, spotsToLookAt,
+						spotsInLineOfFire);
+			}
+		}
+	}
+	
+	//adds to the line of fire in the straight line attack
+	private void addStraightToLineOfFire(int attackingRow, int attackingCol, int kingRow, int kingCol,
+			int spotsToLookAt, Map<Integer, Set<Integer>> spotsInLineOfFire) {
+		if(attackingRow < kingRow) {
+			addToLineOfFire(attackingRow, attackingCol, 1, 0, spotsToLookAt,
+					spotsInLineOfFire);
+		} else if(attackingRow > kingRow) {
+			addToLineOfFire(attackingRow, attackingCol, -1, 0, spotsToLookAt,
+					spotsInLineOfFire);
+		} else if(attackingCol < kingCol) {
+			addToLineOfFire(attackingRow, attackingCol, 0, 1, spotsToLookAt,
+					spotsInLineOfFire);
+		} else { //attackingCol > kingCol
+			addToLineOfFire(attackingRow, attackingCol, 0, -1, spotsToLookAt,
+					spotsInLineOfFire);
+		}
+	}
+	
+	//adds spots to line of fire based on the diagonal/straight line passed in
+	private void addToLineOfFire(int startingRow, int startingCol, int rowChange, int colChange,
+			int spotsToLookAt, Map<Integer, Set<Integer>> spotsInLineOfFire) {
+		for(int i = 1; i <= spotsToLookAt; i++) {
+			int attackingRow = startingRow + rowChange*i;
+			if(!spotsInLineOfFire.containsKey(attackingRow)) {
+				spotsInLineOfFire.put(attackingRow, new HashSet<>());
+			}
+			spotsInLineOfFire.get(attackingRow).add(startingCol + colChange*i);
+		}
 	}
 }
