@@ -17,6 +17,8 @@ public class ChessBoard {
 	private boolean curPlayerInCheck;
 	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
 	private Set<ChessPiece> doubleJumpPawns;
+	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
+	private Integer[] currentTeamsKingLocation;
 	
 	public ChessBoard() {
 		board = new ChessPiece[SIZE][SIZE];
@@ -24,6 +26,7 @@ public class ChessBoard {
 		blackPieces = initializeTeamPieces(false);
 		whiteTurn = true;
 		doubleJumpPawns = new HashSet<>();
+		currentTeamMoves = findCurrentTeamsMoves();
 	}
 	
 	//sets up the pieces for the given team at the start of the game
@@ -54,12 +57,73 @@ public class ChessBoard {
 		inFromBoundary++;
 		teamPieces.put(new Queen(isWhite), new Integer[] {otherPiecesRow, inFromBoundary});
 		teamPieces.put(new King(isWhite), new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary});
+		if(isWhite) {
+			currentTeamsKingLocation = new Integer[] {otherPiecesRow, SIZE - 1 - inFromBoundary};
+		}
 		//puts pieces on the board
 		for(ChessPiece piece : teamPieces.keySet()) {
 			Integer[] location = teamPieces.get(piece);
 			board[location[0]][location[1]] = piece;
 		}
 		return teamPieces;
+	}
+	
+	private Map<ChessPiece, Set<PieceMove>> findCurrentTeamsMoves() {
+		Map<ChessPiece, Integer[]> currentTeamPieces;
+		Map<ChessPiece, Integer[]> opposingTeamPieces;
+		if(whiteTurn) {
+			currentTeamPieces = whitePieces;
+			opposingTeamPieces = blackPieces;
+		} else {
+			currentTeamPieces = blackPieces;
+			opposingTeamPieces = whitePieces;
+		}
+		Map<ChessPiece, Map<Integer, Set<Integer>>> linesOfFire = new HashMap<>();
+		for(ChessPiece opposingPiece : opposingTeamPieces.keySet()) {
+			Map<Integer, Set<Integer>> lineOfFire = spotsBetweenOpposingPieceAndCurrentKing(opposingPiece);
+			if(lineOfFire != null) {
+				linesOfFire.put(opposingPiece, lineOfFire);
+			}
+		}
+		
+		Map<ChessPiece, Set<PieceMove>> possibleMoves = new HashMap<>();
+		for(ChessPiece teamPiece : currentTeamPieces.keySet()) {
+			if(teamPiece instanceof King) {
+				possibleMoves.put(teamPiece, teamPiece.legalMoves(this));
+			} else {
+				ChessPiece lineOfFireCauser = inPossibleLineOfFire(teamPiece, linesOfFire);
+				if(lineOfFireCauser == null) {
+					possibleMoves.put(teamPiece, teamPiece.legalMoves(this));
+				} else if(teamPiece instanceof Pawn || teamPiece instanceof Knight) {
+					possibleMoves.put(teamPiece, new HashSet<>());
+				} else {
+					Set<PieceMove> moves = teamPiece.legalMoves(this);
+					retainSpotsInLineOfFire(moves, linesOfFire.get(lineOfFireCauser));
+				}
+				possibleMoves.put(teamPiece, teamPiece.legalMoves(this));
+			}
+		}
+		return possibleMoves;
+	}
+	
+	
+	private ChessPiece inPossibleLineOfFire(ChessPiece defender,
+			Map<ChessPiece, Map<Integer, Set<Integer>>> linesOfFire) {
+		return null;
+	}
+	
+	private void retainSpotsInLineOfFire(Set<PieceMove> moves, Map<Integer, Set<Integer>> lineOfFire) {
+		
+	}
+	
+	private Map<Integer, Set<Integer>> spotsBetweenOpposingPieceAndCurrentKing(ChessPiece opposingPiece) {
+		if(opposingPiece instanceof Pawn || opposingPiece instanceof Knight ||
+				opposingPiece instanceof King) {
+			return null;
+		}
+		Map<Integer, Set<Integer>> result = new HashMap<>();
+		
+		return result;
 	}
 	
 	/**
@@ -170,6 +234,10 @@ public class ChessBoard {
 		return pieceCausingCheck;
 	}
 	
+	public Integer[] currentTeamsKingsLocation() {
+		return currentTeamsKingLocation;
+	}
+	
 	/**
 	 * finds all of the spots on the board that other pieces could move to, to block the "check"
 	 * 
@@ -190,7 +258,7 @@ public class ChessBoard {
 		if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen ||
 				pieceCausingCheck instanceof Rook) {
 			//pawns and knights can only attack directly so there is no line of fire
-			Integer[] kingLocation = locationOfInCheckKing();
+			Integer[] kingLocation = locationOfCurrentTeamsKing();
 			int kingRow = kingLocation[0];
 			int kingCol = kingLocation[1];
 			int spotsToLookAt = Math.abs(kingRow - attackingRow) - 1;
@@ -213,8 +281,8 @@ public class ChessBoard {
 		return spotsInLineOfFire;
 	}
 	
-	//finds the location of the "in check" king
-	private Integer[] locationOfInCheckKing() {
+	//finds the location of the current team's king
+	private Integer[] locationOfCurrentTeamsKing() {
 		Map<ChessPiece, Integer[]> team;
 		if(whiteTurn) {
 			team = whitePieces;
