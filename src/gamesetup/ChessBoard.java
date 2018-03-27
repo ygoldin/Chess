@@ -69,6 +69,8 @@ public class ChessBoard {
 		return teamPieces;
 	}
 	
+	//map from every piece on the current team to every move it can make
+	//empty set means this piece cannot move
 	private Map<ChessPiece, Set<PieceMove>> findCurrentTeamsMoves() {
 		Map<ChessPiece, Integer[]> currentTeamPieces;
 		Map<ChessPiece, Integer[]> opposingTeamPieces;
@@ -108,7 +110,8 @@ public class ChessBoard {
 		return possibleMoves;
 	}
 	
-	
+	//returns the piece causing the line of fire for the defender
+	//or null if the defender is free to move anywhere
 	private ChessPiece inPossibleLineOfFire(ChessPiece defender,
 			Map<ChessPiece, Map<Integer, Set<Integer>>> linesOfFire) {
 		Integer[] defenderLocation = getSpotOfPiece(defender);
@@ -124,7 +127,7 @@ public class ChessBoard {
 		return null;
 	}
 	
-	//only keep moves in the set
+	//only keep moves in the set that are in the line of fire
 	private void retainSpotsInLineOfFire(Set<PieceMove> moves, Map<Integer, Set<Integer>> lineOfFire) {
 		Iterator<PieceMove> moveIterator = moves.iterator();
 		while(moveIterator.hasNext()) {
@@ -136,6 +139,8 @@ public class ChessBoard {
 		}
 	}
 	
+	//finds all of the spots in the line of fire for the opposing piece
+	//null if it cannot be in an attacking "line" with the king
 	private Map<Integer, Set<Integer>> spotsBetweenOpposingPieceAndCurrentKing(ChessPiece opposingPiece) {
 		if(opposingPiece instanceof Pawn || opposingPiece instanceof Knight ||
 				opposingPiece instanceof King) {
