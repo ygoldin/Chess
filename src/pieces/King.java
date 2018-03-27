@@ -71,7 +71,22 @@ public class King implements ChessPiece {
 					result.get(move.destinationRow).add(move.destinationColumn);
 				}
 			} else {
-				//deal with pawn moves not being all offensive
+				//only diagonal "taking" is the line of fire for pawns
+				int direction;
+				if(isWhite) { //pawn is black
+					direction = 1;
+				} else { //pawn is white
+					direction = -1;
+				}
+				Integer[] pawnLocation = board.getSpotOfPiece(opposingPiece);
+				int pawnAttackRow = pawnLocation[0] + direction;
+				if(!result.containsKey(pawnAttackRow)) {
+					result.put(pawnAttackRow, new HashSet<Integer>());
+				}
+				//doesn't matter if these locations are out of bounds or taken by other pieces
+				//king can't move there in that case anyway
+				result.get(pawnAttackRow).add(pawnLocation[1] - 1);
+				result.get(pawnAttackRow).add(pawnLocation[1] + 1);
 			}
 		}
 		return result;
