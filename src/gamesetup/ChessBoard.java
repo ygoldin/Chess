@@ -3,6 +3,7 @@ package gamesetup;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -100,8 +101,8 @@ public class ChessBoard {
 				} else {
 					Set<PieceMove> moves = teamPiece.legalMoves(this);
 					retainSpotsInLineOfFire(moves, linesOfFire.get(lineOfFireCauser));
+					possibleMoves.put(teamPiece, moves);
 				}
-				possibleMoves.put(teamPiece, teamPiece.legalMoves(this));
 			}
 		}
 		return possibleMoves;
@@ -123,8 +124,16 @@ public class ChessBoard {
 		return null;
 	}
 	
+	//only keep moves in the set
 	private void retainSpotsInLineOfFire(Set<PieceMove> moves, Map<Integer, Set<Integer>> lineOfFire) {
-		
+		Iterator<PieceMove> moveIterator = moves.iterator();
+		while(moveIterator.hasNext()) {
+			PieceMove curMove = moveIterator.next();
+			if(!lineOfFire.containsKey(curMove.destinationRow) ||
+					!lineOfFire.get(curMove.destinationRow).contains(curMove.destinationColumn)) {
+				moveIterator.remove();
+			}
+		}
 	}
 	
 	private Map<Integer, Set<Integer>> spotsBetweenOpposingPieceAndCurrentKing(ChessPiece opposingPiece) {
@@ -152,8 +161,6 @@ public class ChessBoard {
 		//now the piece is confirmed to be in the right position for a possible line of fire
 		int spotsToLookAt = Math.abs(kingRow - attackingRow - 1);
 		Map<Integer, Set<Integer>> result = new HashMap<>();
-		result.put(attackingRow, new HashSet<>());
-		result.get(attackingRow).add(attackingCol);
 		if(opposingPiece instanceof Bishop || (opposingPiece instanceof Queen && attackingRow != kingRow &&
 				attackingCol != kingCol)) {
 			addDiagonalToLineOfFire(attackingRow, attackingCol, kingRow, kingCol, spotsToLookAt, result);
@@ -173,6 +180,11 @@ public class ChessBoard {
 				}
 			}
 		}
+		//adds the position of the attacking piece to the line of fire
+		if(!result.containsKey(attackingRow)) {
+			result.put(attackingRow, new HashSet<>());
+		}
+		result.get(attackingRow).add(attackingCol);
 		return result;
 	}
 	
