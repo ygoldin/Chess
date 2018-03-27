@@ -9,10 +9,9 @@ import gamesetup.*;
  * this class represents a knight in a game of chess
  * @author Yael Goldin
  */
-public class Knight implements ChessPiece {
+public class Knight extends ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a knight of the given team
@@ -46,7 +45,7 @@ public class Knight implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			int[] firstDirection = new int[] {1, -1};
 			int[] secondDirection = new int[] {2, -2};
 			Integer[] myLocation = board.getSpotOfPiece(this);
@@ -66,19 +65,9 @@ public class Knight implements ChessPiece {
 	private void checkMove(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece == null || otherPiece.isWhite() != isWhite) {
+			if(otherPiece == null || !isSameTeam(otherPiece)) {
 				moves.add(new PieceMove(curRow, curCol, otherPiece));
 			}
 		}
-	}
-	
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
 	}
 }

@@ -8,10 +8,9 @@ import gamesetup.*;
  * this class represents a pawn in a game of chess
  * @author Yael Goldin
  */
-public class Pawn implements ChessPiece {
+public class Pawn extends ChessPiece {
 	private static final int VALUE = 1;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a pawn of the given team
@@ -45,7 +44,7 @@ public class Pawn implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			int myRow = myLocation[0];
 			int myCol = myLocation[1];
@@ -82,7 +81,7 @@ public class Pawn implements ChessPiece {
 	private void checkTakingDiagonally(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece != null && otherPiece.isWhite() != isWhite) { //piece of other color
+			if(otherPiece != null && !isSameTeam(otherPiece)) { //piece of other color
 				moves.add(new PieceMove(curRow, curCol, otherPiece));
 			}
 		}
@@ -93,20 +92,10 @@ public class Pawn implements ChessPiece {
 			int direction) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece != null && otherPiece.isWhite() != isWhite && otherPiece instanceof Pawn &&
+			if(otherPiece != null && !isSameTeam(otherPiece) && otherPiece instanceof Pawn &&
 					board.pawnsForEnPassant().contains(otherPiece)) {
 				moves.add(new PieceMove(curRow + direction, curCol, otherPiece));
 			}
 		}
-	}
-	
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
 	}
 }

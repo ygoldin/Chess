@@ -9,10 +9,9 @@ import gamesetup.*;
  * this class represents a queen in a game of chess
  * @author Yael Goldin
  */
-public class Queen implements ChessPiece {
+public class Queen extends ChessPiece {
 	private static final int VALUE = 8;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a queen of the given team
@@ -46,21 +45,11 @@ public class Queen implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			Rook.straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 			Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		}
 		return moves;
-	}
-	
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
 	}
 }

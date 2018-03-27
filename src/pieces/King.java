@@ -11,10 +11,9 @@ import gamesetup.*;
  * this class represents a king in a game of chess
  * @author Yael Goldin
  */
-public class King implements ChessPiece {
+public class King extends ChessPiece {
 	private static final int VALUE = 0;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a king of the given team
@@ -48,7 +47,7 @@ public class King implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			int myRow = myLocation[0];
 			int myCol = myLocation[1];
@@ -60,7 +59,7 @@ public class King implements ChessPiece {
 							(!illegalMoves.containsKey(curRow) ||
 							!illegalMoves.get(curRow).contains(curCol))) {
 						ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-						if(otherPiece == null || otherPiece.isWhite() != isWhite) {
+						if(otherPiece == null || !isSameTeam(otherPiece)) {
 							moves.add(new PieceMove(curRow, curCol, otherPiece));
 						}
 					}
@@ -121,7 +120,7 @@ public class King implements ChessPiece {
 	private boolean canCastle(int myRow, int possibleRookColumn, int columnCheckStart, int columnCheckEnd,
 			ChessBoard board, Map<Integer, Set<Integer>> illegalMoves) {
 		ChessPiece possibleRook = board.getPieceAtSpot(myRow, possibleRookColumn);
-		if(possibleRook instanceof Rook && possibleRook.isWhite() == isWhite && !possibleRook.hasMoved()) {
+		if(possibleRook instanceof Rook && isSameTeam(possibleRook) && !possibleRook.hasMoved()) {
 			for(int curCol = columnCheckStart; curCol < columnCheckEnd; curCol++) {
 				if(board.getPieceAtSpot(myRow, curCol) != null || (illegalMoves.containsKey(myRow)
 						&& illegalMoves.get(myRow).contains(curCol))) {
@@ -131,15 +130,5 @@ public class King implements ChessPiece {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
 	}
 }

@@ -9,10 +9,9 @@ import gamesetup.*;
  * this class represents a bishop in a game of chess
  * @author Yael Goldin
  */
-public class Bishop implements ChessPiece {
+public class Bishop extends ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a bishop of the given team
@@ -46,7 +45,7 @@ public class Bishop implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		}
@@ -81,21 +80,11 @@ public class Bishop implements ChessPiece {
 				curRow += rowDirection;
 				curCol += colDirection;
 			} else { //there's another piece, you can't move past it
-				if(otherPiece.isWhite() != pieceIsWhite) { //can take it
+				if(otherPiece.isWhite() != pieceIsWhite) { //can take it TODO can't call isSameTeam
 					moves.add(new PieceMove(curRow, curCol, otherPiece));
 				}
 				break;
 			}
 		}
-	}
-	
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
 	}
 }

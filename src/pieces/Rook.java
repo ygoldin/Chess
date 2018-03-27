@@ -10,10 +10,9 @@ import gamesetup.PieceMove;
  * this class represents a rook in a game of chess
  * @author Yael Goldin
  */
-public class Rook implements ChessPiece {
+public class Rook extends ChessPiece {
 	private static final int VALUE = 5;
 	private final boolean isWhite;
-	private boolean hasMoved;
 	
 	/**
 	 * constructs a rook of the given team
@@ -47,7 +46,7 @@ public class Rook implements ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(board.isWhiteTurn() == isWhite) {
+		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		}
@@ -82,7 +81,7 @@ public class Rook implements ChessPiece {
 				curRow += rowDirection;
 				curCol += colDirection;
 			} else {
-				if(otherPiece.isWhite() != pieceIsWhite) { //can take it
+				if(otherPiece.isWhite() != pieceIsWhite) { //can take it TODO cant use isSameTeam()
 					moves.add(new PieceMove(curRow, curCol, otherPiece));
 				}
 				break; //if there's another piece, you can't move past it
