@@ -13,6 +13,7 @@ import gamesetup.PieceMove;
 public class Rook implements ChessPiece {
 	private static final int VALUE = 5;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a rook of the given team
@@ -87,5 +88,15 @@ public class Rook implements ChessPiece {
 				break; //if there's another piece, you can't move past it
 			}
 		}
+	}
+	
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
+
+	@Override
+	public void markMoved() {
+		hasMoved = true;
 	}
 }

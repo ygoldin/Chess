@@ -12,6 +12,7 @@ import gamesetup.*;
 public class Queen implements ChessPiece {
 	private static final int VALUE = 8;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a queen of the given team
@@ -51,5 +52,15 @@ public class Queen implements ChessPiece {
 			Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		}
 		return moves;
+	}
+	
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
+
+	@Override
+	public void markMoved() {
+		hasMoved = true;
 	}
 }

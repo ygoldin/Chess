@@ -12,6 +12,7 @@ import gamesetup.*;
 public class Bishop implements ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a bishop of the given team
@@ -86,5 +87,15 @@ public class Bishop implements ChessPiece {
 				break;
 			}
 		}
+	}
+	
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
+
+	@Override
+	public void markMoved() {
+		hasMoved = true;
 	}
 }

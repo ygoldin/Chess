@@ -14,6 +14,7 @@ import gamesetup.*;
 public class King implements ChessPiece {
 	private static final int VALUE = 0;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a king of the given team
@@ -101,5 +102,15 @@ public class King implements ChessPiece {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
+
+	@Override
+	public void markMoved() {
+		hasMoved = true;
 	}
 }

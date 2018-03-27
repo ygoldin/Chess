@@ -12,6 +12,7 @@ import gamesetup.*;
 public class Knight implements ChessPiece {
 	private static final int VALUE = 3;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a knight of the given team
@@ -69,5 +70,15 @@ public class Knight implements ChessPiece {
 				moves.add(new PieceMove(curRow, curCol, otherPiece));
 			}
 		}
+	}
+	
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
+
+	@Override
+	public void markMoved() {
+		hasMoved = true;
 	}
 }

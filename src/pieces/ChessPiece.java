@@ -31,4 +31,16 @@ public interface ChessPiece {
 	 * of this piece's team or no legal moves can be made
 	 */
 	public Set<PieceMove> legalMoves(ChessBoard board);
+	
+	/**
+	 * checks if the piece has never moved during the game
+	 * 
+	 * @return true if it has never moved, false otherwise
+	 */
+	public boolean hasNeverMoved();
+	
+	/**
+	 * marks that the piece has moved
+	 */
+	public void markMoved();
 }

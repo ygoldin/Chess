@@ -11,6 +11,7 @@ import gamesetup.*;
 public class Pawn implements ChessPiece {
 	private static final int VALUE = 1;
 	private final boolean isWhite;
+	private boolean hasMoved;
 	
 	/**
 	 * constructs a pawn of the given team
@@ -59,7 +60,7 @@ public class Pawn implements ChessPiece {
 			if(board.isInBounds(oneRowForward, myCol) && board.getPieceAtSpot(oneRowForward, myCol) == null) {
 				moves.add(new PieceMove(oneRowForward, myCol));
 				int twoRowsForward = oneRowForward + direction;
-				if(board.isInBounds(twoRowsForward, myCol) &&
+				if(!hasMoved && board.isInBounds(twoRowsForward, myCol) &&
 						board.getPieceAtSpot(twoRowsForward, myCol) == null) {
 					moves.add(new PieceMove(twoRowsForward, myCol));
 				}
@@ -97,5 +98,14 @@ public class Pawn implements ChessPiece {
 			}
 		}
 	}
+	
+	@Override
+	public boolean hasNeverMoved() {
+		return hasMoved;
+	}
 
+	@Override
+	public void markMoved() {
+		hasMoved = true;
+	}
 }
