@@ -13,6 +13,7 @@ import gamesetup.*;
  */
 public class King extends ChessPiece {
 	private static final int VALUE = 0;
+	private static final String SYMBOL = "K";
 	private final boolean isWhite;
 	
 	/**
@@ -28,20 +29,15 @@ public class King extends ChessPiece {
 	public int getValue() {
 		return VALUE;
 	}
+	
+	@Override
+	public String getSymbol() {
+		return SYMBOL;
+	}
 
 	@Override
 	public boolean isWhite() {
 		return isWhite;
-	}
-	
-	@Override
-	public String toString() {
-		String type = "king";
-		if(isWhite) {
-			return "w " + type;
-		} else {
-			return "b " + type;
-		}
 	}
 
 	@Override

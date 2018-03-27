@@ -11,6 +11,7 @@ import gamesetup.*;
  */
 public class Knight extends ChessPiece {
 	private static final int VALUE = 3;
+	private static final String SYMBOL = "N";
 	private final boolean isWhite;
 	
 	/**
@@ -26,20 +27,15 @@ public class Knight extends ChessPiece {
 	public int getValue() {
 		return VALUE;
 	}
+	
+	@Override
+	public String getSymbol() {
+		return SYMBOL;
+	}
 
 	@Override
 	public boolean isWhite() {
 		return isWhite;
-	}
-	
-	@Override
-	public String toString() {
-		String type = "knight";
-		if(isWhite) {
-			return "w " + type;
-		} else {
-			return "b " + type;
-		}
 	}
 
 	@Override

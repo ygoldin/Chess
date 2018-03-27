@@ -280,4 +280,33 @@ public class ChessBoard {
 			spotsInLineOfFire.get(attackingRow).add(startingCol + colChange*i);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		String blank = "  ";
+		for(int row = 0; row < SIZE; row++) {
+			result += "[";
+			ChessPiece curPiece = board[row][0];
+			if(curPiece != null) {
+				result += curPiece.toString();
+			} else {
+				result += blank;
+			}
+			for(int col = 1; col < SIZE; col++) {
+				result += ", ";
+				curPiece = board[row][col];
+				if(curPiece != null) {
+					result += curPiece.toString();
+				} else {
+					result += blank;
+				}
+			}
+			result += "]";
+			if(row != SIZE - 1) {
+				result += "\n";
+			}
+		}
+		return result;
+	}
 }

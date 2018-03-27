@@ -20,6 +20,13 @@ public abstract class ChessPiece {
 	public abstract int getValue();
 	
 	/**
+	 * finds the symbol representation of the piece type
+	 * 
+	 * @return the symbol
+	 */
+	public abstract String getSymbol();
+	
+	/**
 	 * checks if the piece is on the white or black team
 	 * 
 	 * @return true if white, false if black
@@ -111,5 +118,15 @@ public abstract class ChessPiece {
 	 */
 	protected static void leaveMovesThatRemainInLineOfFire(Set<PieceMove> moves, ChessBoard board) {
 		
+	}
+	
+	@Override
+	public String toString() {
+		String type = getSymbol();
+		if(isWhite()) {
+			return "w" + type;
+		} else {
+			return "b" + type;
+		}
 	}
 }

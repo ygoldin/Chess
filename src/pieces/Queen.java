@@ -11,6 +11,7 @@ import gamesetup.*;
  */
 public class Queen extends ChessPiece {
 	private static final int VALUE = 8;
+	private static final String SYMBOL = "Q";
 	private final boolean isWhite;
 	
 	/**
@@ -25,6 +26,11 @@ public class Queen extends ChessPiece {
 	@Override
 	public int getValue() {
 		return VALUE;
+	}
+	
+	@Override
+	public String getSymbol() {
+		return SYMBOL;
 	}
 
 	@Override

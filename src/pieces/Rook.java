@@ -12,6 +12,7 @@ import gamesetup.PieceMove;
  */
 public class Rook extends ChessPiece {
 	private static final int VALUE = 5;
+	private static final String SYMBOL = "R";
 	private final boolean isWhite;
 	
 	/**
@@ -27,20 +28,15 @@ public class Rook extends ChessPiece {
 	public int getValue() {
 		return VALUE;
 	}
+	
+	@Override
+	public String getSymbol() {
+		return SYMBOL;
+	}
 
 	@Override
 	public boolean isWhite() {
 		return isWhite;
-	}
-	
-	@Override
-	public String toString() {
-		String type = "rook";
-		if(isWhite) {
-			return "w " + type;
-		} else {
-			return "b " + type;
-		}
 	}
 
 	@Override
