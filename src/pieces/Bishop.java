@@ -48,6 +48,7 @@ public class Bishop extends ChessPiece {
 		if(isTeamsTurn(board)) {
 			Integer[] myLocation = board.getSpotOfPiece(this);
 			diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+			leaveMovesThatStopCheck(moves, board);
 		}
 		return moves;
 	}

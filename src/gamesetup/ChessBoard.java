@@ -148,21 +148,21 @@ public class ChessBoard {
 	 * @return a map from rows to columns of spots on the board in the line of fire (including the
 	 * attacking piece). Will be null if the current player is not in check 
 	 */
-	public Map<Integer, Integer> inCheckLineOfFire() {
+	public Map<Integer, Set<Integer>> inCheckLineOfFire() {
 		if(!curPlayerInCheck) {
 			return null;
 		}
-		Integer[] kingLocation = locationOfKing(whiteTurn);
+		Integer[] kingLocation = locationOfInCheckKing();
 		Integer[] attackingPieceLocation = getSpotOfPiece(pieceCausingCheck);
-		Map<Integer, Integer> spotsInLineOfFire = new HashMap<>();
+		Map<Integer, Set<Integer>> spotsInLineOfFire = new HashMap<>();
 		//TODO
 		return spotsInLineOfFire;
 	}
 	
 	//finds the location of the "in check" king
-	private Integer[] locationOfKing(boolean isWhiteTurn) {
+	private Integer[] locationOfInCheckKing() {
 		Map<ChessPiece, Integer[]> team;
-		if(isWhiteTurn) {
+		if(whiteTurn) {
 			team = whitePieces;
 		} else {
 			team = blackPieces;

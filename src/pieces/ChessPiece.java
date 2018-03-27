@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import gamesetup.*;
 
@@ -67,5 +69,26 @@ public abstract class ChessPiece {
 	 */
 	public boolean isTeamsTurn(ChessBoard board) {
 		return board.isWhiteTurn() == isWhite();
+	}
+	
+	/**
+	 * retains the moves that will stop the check from occurring
+	 * does nothing if there is no check
+	 * 
+	 * @param moves The possible legal moves of the piece without considering check
+	 * @param board The board on which the check occurred
+	 */
+	protected static void leaveMovesThatStopCheck(Set<PieceMove> moves, ChessBoard board) {
+		if(board.curPlayerIsInCheck()) {
+			Map<Integer, Set<Integer>> lineOfFire = board.inCheckLineOfFire();
+			Iterator<PieceMove> moveIterator = moves.iterator();
+			while(moveIterator.hasNext()) {
+				PieceMove curMove = moveIterator.next();
+				if(!lineOfFire.containsKey(curMove.destinationRow) ||
+						!lineOfFire.get(curMove.destinationRow).contains(curMove.destinationColumn)) {
+					moveIterator.remove();
+				}
+			}
+		}
 	}
 }

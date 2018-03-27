@@ -57,6 +57,7 @@ public class Knight extends ChessPiece {
 					checkMove(myRow + direction2, myCol + direction1, board, moves);
 				}
 			}
+			leaveMovesThatStopCheck(moves, board);
 		}
 		return moves;
 	}
