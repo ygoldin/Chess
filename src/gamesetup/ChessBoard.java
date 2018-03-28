@@ -215,7 +215,10 @@ public class ChessBoard {
 	 * @return the chess piece at that spot, or null if no piece exists there
 	 */
 	public ChessPiece getPieceAtSpot(int row, int col) {
-		return null;
+		if(!isInBounds(row, col)) {
+			throw new IllegalArgumentException("spot out of bounds");
+		}
+		return board[row][col];
 	}
 	
 	/**
@@ -225,7 +228,16 @@ public class ChessBoard {
 	 * @return the location of the piece on the board, in the form [row, col]
 	 */
 	public Integer[] getSpotOfPiece(ChessPiece piece) {
-		return null;
+		Map<ChessPiece, Integer[]> teamPieces;
+		if(piece.isWhite()) {
+			teamPieces = whitePieces;
+		} else {
+			teamPieces = blackPieces;
+		}
+		if(!teamPieces.containsKey(piece)) {
+			throw new IllegalArgumentException("piece doesn't exist in the game");
+		}
+		return teamPieces.get(piece);
 	}
 	
 	/**
@@ -440,6 +452,28 @@ public class ChessBoard {
 			}
 			spotsInLineOfFire.get(attackingRow).add(startingCol + colChange*i);
 		}
+	}
+	
+	/**
+	 * checks if the game is over
+	 * 
+	 * @return true if the game is over, false otherwise
+	 */
+	public boolean isGameOver() {
+		return currentTeamMoves.isEmpty();
+	}
+	
+	/**
+	 * checks if the game ended in a checkmate
+	 * 
+	 * @return true if it did, false if it ended in stalemate
+	 * @throws IllegalStateException if the game is not over
+	 */
+	public boolean endedInCheckmate() {
+		if(!isGameOver()) {
+			throw new IllegalStateException("game not over");
+		}
+		return curPlayerInCheck;
 	}
 	
 	@Override
