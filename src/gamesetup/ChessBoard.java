@@ -245,12 +245,38 @@ public class ChessBoard {
 	 * @param row The row of the spot
 	 * @param col The column of the spot
 	 * @return The piece taken during this move, or null if no piece was taken
+	 * @throws IllegalArgumentException if the spot is out of bounds, it is not this team's turn,
+	 * the piece doesn't exist in the game, or the move is not valid
 	 */
 	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
+		if(!isInBounds(row, col)) {
+			throw new IllegalArgumentException("spot not in bounds");
+		}
+		PieceMove move = isValidMove(piece, row, col);
+		if(move == null) {
+			throw new IllegalArgumentException("invalid move");
+		}
 		//TODO: make sure to:
 		//clear en passant
 		//check for kings in check
 		//check if a move puts a king in check (by the moved piece or any other piece)
+		return null;
+	}
+	
+	//checks if it's valid to move that piece there
+	//returns the associated PieceMove object with that move
+	private PieceMove isValidMove(ChessPiece piece, int row, int col) {
+		if(!piece.isTeamsTurn(this)) {
+			throw new IllegalArgumentException("it's the opposing team's turn");
+		} else if(!currentTeamMoves.containsKey(piece)) {
+			throw new IllegalArgumentException("this piece doesn't exist in the game");
+		}
+		Set<PieceMove> possiblePieceMoves = currentTeamMoves.get(piece);
+		for(PieceMove move : possiblePieceMoves) {
+			if(move.destinationRow == row && move.destinationColumn == col) {
+				return move;
+			}
+		}
 		return null;
 	}
 	
