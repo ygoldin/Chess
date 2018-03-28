@@ -245,9 +245,11 @@ public class ChessBoard {
 	 * 
 	 * @param piece The piece to find moves for
 	 * @return a set of all of the moves the piece can make, will be empty if it cannot make any
+	 * @throws IllegalArgumentException if it's not this team's turn or the piece doesn't exist in the game
 	 */
 	public Set<PieceMove> legalMoves(ChessPiece piece) {
-		return null;
+		checkInvalidPieceInput(piece);
+		return currentTeamMoves.get(piece);
 	}
 	
 	/**
@@ -278,11 +280,7 @@ public class ChessBoard {
 	//checks if it's valid to move that piece there
 	//returns the associated PieceMove object with that move
 	private PieceMove isValidMove(ChessPiece piece, int row, int col) {
-		if(!piece.isTeamsTurn(this)) {
-			throw new IllegalArgumentException("it's the opposing team's turn");
-		} else if(!currentTeamMoves.containsKey(piece)) {
-			throw new IllegalArgumentException("this piece doesn't exist in the game");
-		}
+		checkInvalidPieceInput(piece);
 		Set<PieceMove> possiblePieceMoves = currentTeamMoves.get(piece);
 		for(PieceMove move : possiblePieceMoves) {
 			if(move.destinationRow == row && move.destinationColumn == col) {
@@ -290,6 +288,15 @@ public class ChessBoard {
 			}
 		}
 		return null;
+	}
+	
+	//checks if the piece is valid (this teams turn, is on the board)
+	private void checkInvalidPieceInput(ChessPiece piece) {
+		if(!piece.isTeamsTurn(this)) {
+			throw new IllegalArgumentException("it's the opposing team's turn");
+		} else if(!currentTeamMoves.containsKey(piece)) {
+			throw new IllegalArgumentException("this piece doesn't exist in the game");
+		}
 	}
 	
 	/**
