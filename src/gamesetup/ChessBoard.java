@@ -340,14 +340,14 @@ public class ChessBoard {
 	/**
 	 * checks if a piece is causing the opponent's king to be in check
 	 * 
-	 * @return the piece causing check if the opponent is in check, null otherwise
+	 * @return the location of the piece causing check if the current team is in check, null otherwise
 	 */
-	public ChessPiece pieceCausingCheck() {
-		return pieceCausingCheck;
-	}
-	
-	public Integer[] currentTeamsKingsLocation() {
-		return currentTeamsKingLocation;
+	public Integer[] pieceCausingCheck() {
+		if(whiteTurn) {
+			return blackPieces.get(pieceCausingCheck);
+		} else {
+			return whitePieces.get(pieceCausingCheck);
+		}
 	}
 	
 	/**
