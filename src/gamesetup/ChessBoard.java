@@ -176,7 +176,11 @@ public class ChessBoard {
 		int[] spotInLineOfFire = null;
 		for(int row : result.keySet()) {
 			for(int col : result.get(row)) {
-				if(opposingPiece.isSameTeam(getPieceAtSpot(row, col))) {
+				ChessPiece pieceAtSpot = getPieceAtSpot(row, col);
+				if(pieceAtSpot == null) { //no one there
+					continue;
+				}
+				if(opposingPiece.isSameTeam(pieceAtSpot)) {
 					return null;
 				} else if(spotInLineOfFire == null) { //first "defender" found
 					spotInLineOfFire = new int[] {row, col};
