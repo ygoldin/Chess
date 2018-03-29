@@ -270,14 +270,33 @@ public class ChessBoard {
 			throw new IllegalArgumentException("invalid move");
 		}
 		Integer[] currentLocation = getSpotOfPiece(piece);
+		Map<ChessPiece, Integer[]> thisTeam;
+		Map<ChessPiece, Integer[]> otherTeam;
+		if(piece.isWhite()) {
+			thisTeam = whitePieces;
+			otherTeam = blackPieces;
+		} else {
+			thisTeam = blackPieces;
+			otherTeam = whitePieces;
+		}
 		//en passant
 		if(piece instanceof Pawn && Math.abs(move.destinationRow - currentLocation[0]) == 2) {
 			doubleJumpPawn = piece;
 		} else {
 			doubleJumpPawn = null;
 		}
+		//remove taken piece
+		if(move.takenPiece != null) {
+			otherTeam.remove(move.takenPiece);
+			Integer[] takenLocation = getSpotOfPiece(move.takenPiece);
+			board[takenLocation[0]][takenLocation[1]] = null;
+		}
+		//move piece
+		board[currentLocation[0]][currentLocation[1]] = null;
+		board[row][col] = piece;
+		Integer[] newLocation = new Integer[] {row, col};
+		thisTeam.put(piece, newLocation);
 		//TODO: make sure to:
-		//clear en passant
 		//check for kings in check
 		//check if a move puts a king in check (by the moved piece or any other piece)
 		return move.takenPiece;
