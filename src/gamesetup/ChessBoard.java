@@ -304,14 +304,23 @@ public class ChessBoard {
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
 		thisTeam.put(piece, newLocation);
-		if(movedPieceCausedCheck(piece)) {
+		//possibly causing check
+		Integer[] otherKingLocation = locationOfTeamsKing(!whiteTurn);
+		ChessPiece otherKing = getPieceAtSpot(otherKingLocation[0], otherKingLocation[1]);
+		if(pieceCausedCheck(piece, otherKing)) {
 			pieceCausingCheck = piece;
 		} else {
-			//TODO
+			for(ChessPiece teamPiece : thisTeam.keySet()) {
+				if(teamPiece != piece && (teamPiece instanceof Bishop || teamPiece instanceof Rook ||
+						teamPiece instanceof Queen) && pieceCausedCheck(teamPiece, otherKing)) {
+					pieceCausingCheck = teamPiece;
+					break;
+				}
+			}
 		}
-		//TODO: make sure to:
-		//check for kings in check
-		//check if a move puts a king in check (by the moved piece or any other piece)
+		//find moves of other team now
+		whiteTurn = !whiteTurn;
+		currentTeamMoves = this.findCurrentTeamsMoves();
 		gameOver = currentTeamMoves.isEmpty();
 		return move.takenPiece;
 	}
@@ -337,11 +346,9 @@ public class ChessBoard {
 		}
 	}
 	
-	//if the moved piece can now "take" the king, it has put it in check
-	private boolean movedPieceCausedCheck(ChessPiece moved) {
-		Set<PieceMove> newMoves = moved.legalMoves(this);
-		Integer[] otherKingLocation = locationOfTeamsKing(!whiteTurn);
-		ChessPiece otherKing = getPieceAtSpot(otherKingLocation[0], otherKingLocation[1]);
+	//if the piece can now "take" the king, it has put it in check
+	private boolean pieceCausedCheck(ChessPiece threat, ChessPiece otherKing) {
+		Set<PieceMove> newMoves = threat.legalMoves(this);
 		for(PieceMove possibleMove : newMoves) {
 			if(possibleMove.takenPiece == otherKing) {
 				return true;
