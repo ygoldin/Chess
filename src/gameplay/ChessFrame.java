@@ -3,11 +3,13 @@ package gameplay;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.*;
-import gamesetup.ChessBoard;
+import gamesetup.*;
+import pieces.ChessPiece;
 
 @SuppressWarnings("serial")
 public class ChessFrame extends JFrame {
@@ -23,7 +25,6 @@ public class ChessFrame extends JFrame {
 		
 		input = new Scanner(System.in);
 		chessBoard = new ChessBoard(input);
-		icons = new PieceIcons();
 		
 		chessSpots = new ChessSpot[ChessBoard.SIZE][ChessBoard.SIZE];
 		JPanel spots = new JPanel();
@@ -34,19 +35,44 @@ public class ChessFrame extends JFrame {
 				spots.add(chessSpots[r][c]);
 			}
 		}
+		icons = new PieceIcons();
 		add(spots);
+		pack();
+		setVisible(true);
+		setupInitialIcons(true);
+		setupInitialIcons(false);
+	}
+	
+	private void setupInitialIcons(boolean white) {
+		Map<ChessPiece, Integer[]> teamPieces = chessBoard.getAllPieces(white);
+		Map<String, ImageIcon> teamIcons = icons.icons.get(white);
+		for(ChessPiece piece : teamPieces.keySet()) {
+			Integer[] location = teamPieces.get(piece);
+			String name = piece.getClass().getName();
+			name = name.substring(name.indexOf(".") + 1);
+			ImageIcon image = teamIcons.get(name);
+			ChessSpot spot = chessSpots[location[0]][location[1]]; 
+			spot.updateIcon(image);
+		}
 	}
 	
 	private class ChessSpot extends JButton {
 		private final Color WHITE_SQUARE = Color.WHITE;
-		private final Color BLACK_SQUARE = Color.BLACK;
+		private final Color BLACK_SQUARE = new Color(139,69,19);
 		
 		public ChessSpot(int row, int col) {
+			super();
 			if((row + col) % 2 == 0) {
 				setBackground(WHITE_SQUARE);
 			} else {
 				setBackground(BLACK_SQUARE);
 			}
+		}
+		
+		public void updateIcon(ImageIcon image) {
+			int height = getHeight();
+			Image scaled = image.getImage().getScaledInstance(-1, height, Image.SCALE_SMOOTH);
+			setIcon(new ImageIcon(scaled));
 		}
 	}
 	

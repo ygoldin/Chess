@@ -28,9 +28,7 @@ public class PlayChess {
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				ChessFrame chess = new ChessFrame();
-				chess.pack();
-				chess.setVisible(true);
+				new ChessFrame();
 			}
 		});
 	}
