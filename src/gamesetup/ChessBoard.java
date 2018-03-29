@@ -269,7 +269,13 @@ public class ChessBoard {
 		if(move == null) {
 			throw new IllegalArgumentException("invalid move");
 		}
-		
+		Integer[] currentLocation = getSpotOfPiece(piece);
+		//en passant
+		if(piece instanceof Pawn && Math.abs(move.destinationRow - currentLocation[0]) == 2) {
+			doubleJumpPawn = piece;
+		} else {
+			doubleJumpPawn = null;
+		}
 		//TODO: make sure to:
 		//clear en passant
 		//check for kings in check
