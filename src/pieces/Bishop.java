@@ -61,9 +61,9 @@ public class Bishop extends ChessPiece {
 	public static void diagonalMoves(int pieceRow, int pieceCol, boolean pieceIsWhite,
 			ChessBoard board, Set<PieceMove> moves) {
 		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, -1, pieceIsWhite, board, moves); //up left
-		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, 1, pieceIsWhite, board, moves); //up right
-		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, 1, -1, pieceIsWhite, board, moves); //down left
-		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, 1, 1, pieceIsWhite, board, moves); //down right
+		diagonalMovesInDirection(pieceRow - 1, pieceCol + 1, -1, 1, pieceIsWhite, board, moves); //up right
+		diagonalMovesInDirection(pieceRow + 1, pieceCol - 1, 1, -1, pieceIsWhite, board, moves); //down left
+		diagonalMovesInDirection(pieceRow + 1, pieceCol + 1, 1, 1, pieceIsWhite, board, moves); //down right
 	}
 	
 	//adds all of the diagonal moves in the given direction where the row and column increase by
