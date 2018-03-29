@@ -5,24 +5,28 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import pieces.*;
 
 public class ChessBoard {
 	public static final int SIZE = 8;
+	private final Scanner input;
 	private Map<ChessPiece, Integer[]> whitePieces;
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
 	private boolean curPlayerInCheck;
 	private boolean gameOver;
+	private Integer[] pawnToPromote;
 	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
 	private ChessPiece doubleJumpPawn; //can only have at most one pawn available for en passant
 	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
 	private Integer[] currentTeamsKingLocation;
 	
-	public ChessBoard() {
+	public ChessBoard(Scanner input) {
+		this.input = input;
 		board = new ChessPiece[SIZE][SIZE];
 		whitePieces = initializeTeamPieces(true);
 		blackPieces = initializeTeamPieces(false);
@@ -291,11 +295,20 @@ public class ChessBoard {
 			thisTeam = blackPieces;
 			otherTeam = whitePieces;
 		}
-		//en passant
-		if(piece instanceof Pawn && Math.abs(move.destinationRow - currentLocation[0]) == 2) {
-			doubleJumpPawn = piece;
-		} else {
-			doubleJumpPawn = null;
+		//special pawn moves
+		if(piece instanceof Pawn) {
+			//en passant
+			if(Math.abs(move.destinationRow - currentLocation[0]) == 2) {
+				doubleJumpPawn = piece;
+			} else {
+				doubleJumpPawn = null;
+				//promotion
+				if(move.destinationRow == 0 || move.destinationRow == SIZE - 1) {
+					ChessPiece newPiece = promotePawn();
+					thisTeam.remove(piece); //remove pawn
+					piece = newPiece;
+				}
+			}
 		}
 		//remove taken piece
 		if(move.takenPiece != null) {
@@ -327,6 +340,22 @@ public class ChessBoard {
 		currentTeamMoves = this.findCurrentTeamsMoves();
 		gameOver = currentTeamMoves.isEmpty();
 		return move.takenPiece;
+	}
+	
+	private ChessPiece promotePawn() {
+		System.out.println("What piece do you want to promote to? (queen, rook, bishop, knight) "); 
+		String type = input.nextLine();
+		if(type.equals("queen")) {
+			return new Queen(whiteTurn);
+		} else if(type.equals("rook")) {
+			return new Rook(whiteTurn);
+		} else if(type.equals("bishop")) {
+			return new Bishop(whiteTurn);
+		} else if(type.equals("knight")) {
+			return new Knight(whiteTurn);
+		} else {
+			return promotePawn();
+		}
 	}
 	
 	//checks if it's valid to move that piece there
