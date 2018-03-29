@@ -61,10 +61,10 @@ public class Rook extends ChessPiece {
 	 */
 	public static void straightMoves(int pieceRow, int pieceCol, boolean pieceIsWhite,
 			ChessBoard board, Set<PieceMove> moves) {
-		straightMovesInDirection(pieceRow - 1, pieceCol - 1, -1, 0, pieceIsWhite, board, moves); //up
-		straightMovesInDirection(pieceRow - 1, pieceCol - 1, 1, 0, pieceIsWhite, board, moves); //down
-		straightMovesInDirection(pieceRow - 1, pieceCol - 1, 0, -1, pieceIsWhite, board, moves); //left
-		straightMovesInDirection(pieceRow - 1, pieceCol - 1, 0, 1, pieceIsWhite, board, moves); //right
+		straightMovesInDirection(pieceRow - 1, pieceCol, -1, 0, pieceIsWhite, board, moves); //up
+		straightMovesInDirection(pieceRow + 1, pieceCol, 1, 0, pieceIsWhite, board, moves); //down
+		straightMovesInDirection(pieceRow, pieceCol - 1, 0, -1, pieceIsWhite, board, moves); //left
+		straightMovesInDirection(pieceRow, pieceCol + 1, 0, 1, pieceIsWhite, board, moves); //right
 	}
 	
 	//adds all of the diagonal moves in the given direction where the row and column increase by
