@@ -295,8 +295,8 @@ public class ChessBoard {
 		}
 		//remove taken piece
 		if(move.takenPiece != null) {
-			otherTeam.remove(move.takenPiece);
 			Integer[] takenLocation = getSpotOfPiece(move.takenPiece);
+			otherTeam.remove(move.takenPiece);
 			board[takenLocation[0]][takenLocation[1]] = null;
 		}
 		//move piece
@@ -563,10 +563,10 @@ public class ChessBoard {
 	
 	@Override
 	public String toString() {
-		String result = "";
+		String result = "   0   1   2   3   4   5   6   7\n";
 		String blank = "  ";
 		for(int row = 0; row < SIZE; row++) {
-			result += "[";
+			result += row + "[";
 			ChessPiece curPiece = board[row][0];
 			if(curPiece != null) {
 				result += curPiece.toString();
