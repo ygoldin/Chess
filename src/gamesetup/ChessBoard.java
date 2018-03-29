@@ -17,7 +17,7 @@ public class ChessBoard {
 	private boolean whiteTurn;
 	private boolean curPlayerInCheck;
 	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
-	private Set<ChessPiece> doubleJumpPawns;
+	private ChessPiece doubleJumpPawn; //can only have at most one pawn available for en passant
 	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
 	private Integer[] currentTeamsKingLocation;
 	
@@ -26,7 +26,6 @@ public class ChessBoard {
 		whitePieces = initializeTeamPieces(true);
 		blackPieces = initializeTeamPieces(false);
 		whiteTurn = true;
-		doubleJumpPawns = new HashSet<>();
 		currentTeamMoves = findCurrentTeamsMoves();
 	}
 	
@@ -270,11 +269,12 @@ public class ChessBoard {
 		if(move == null) {
 			throw new IllegalArgumentException("invalid move");
 		}
+		
 		//TODO: make sure to:
 		//clear en passant
 		//check for kings in check
 		//check if a move puts a king in check (by the moved piece or any other piece)
-		return null;
+		return move.takenPiece;
 	}
 	
 	//checks if it's valid to move that piece there
@@ -322,10 +322,10 @@ public class ChessBoard {
 	/**
 	 * finds all of the pawns that performed a double jump
 	 * 
-	 * @return all of the pawns currently in position to be taken en-passant
+	 * @return the pawn currently in position to be taken en-passant, or null if there isn't one
 	 */
-	public Set<ChessPiece> pawnsForEnPassant() {
-		return Collections.unmodifiableSet(doubleJumpPawns);
+	public ChessPiece pawnForEnPassant() {
+		return doubleJumpPawn;
 	}
 	
 	/**

@@ -65,7 +65,7 @@ public class Pawn extends ChessPiece {
 			checkTakingDiagonally(oneRowForward, myCol - 1, board, moves);
 			checkTakingDiagonally(oneRowForward, myCol + 1, board, moves);
 			//check if you can perform en passant
-			if(!board.pawnsForEnPassant().isEmpty()) {
+			if(board.pawnForEnPassant() != null) {
 				checkEnPassant(myRow, myCol - 1, board, moves, direction);
 				checkEnPassant(myRow, myCol + 1, board, moves, direction);
 			}
@@ -90,7 +90,7 @@ public class Pawn extends ChessPiece {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
 			if(otherPiece != null && !isSameTeam(otherPiece) && otherPiece instanceof Pawn &&
-					board.pawnsForEnPassant().contains(otherPiece)) {
+					board.pawnForEnPassant() == otherPiece) {
 				moves.add(new PieceMove(curRow + direction, curCol, otherPiece));
 			}
 		}
