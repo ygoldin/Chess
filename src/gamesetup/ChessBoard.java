@@ -304,6 +304,11 @@ public class ChessBoard {
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
 		thisTeam.put(piece, newLocation);
+		if(movedPieceCausedCheck(piece)) {
+			pieceCausingCheck = piece;
+		} else {
+			//TODO
+		}
 		//TODO: make sure to:
 		//check for kings in check
 		//check if a move puts a king in check (by the moved piece or any other piece)
@@ -330,6 +335,19 @@ public class ChessBoard {
 		} else if(!currentTeamMoves.containsKey(piece)) {
 			throw new IllegalArgumentException("this piece doesn't exist in the game");
 		}
+	}
+	
+	//if the moved piece can now "take" the king, it has put it in check
+	private boolean movedPieceCausedCheck(ChessPiece moved) {
+		Set<PieceMove> newMoves = moved.legalMoves(this);
+		Integer[] otherKingLocation = locationOfTeamsKing(!whiteTurn);
+		ChessPiece otherKing = getPieceAtSpot(otherKingLocation[0], otherKingLocation[1]);
+		for(PieceMove possibleMove : newMoves) {
+			if(possibleMove.takenPiece == otherKing) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -416,7 +434,7 @@ public class ChessBoard {
 		if(pieceCausingCheck instanceof Bishop || pieceCausingCheck instanceof Queen ||
 				pieceCausingCheck instanceof Rook) {
 			//pawns and knights can only attack directly so there is no line of fire
-			Integer[] kingLocation = locationOfCurrentTeamsKing();
+			Integer[] kingLocation = locationOfTeamsKing(whiteTurn);
 			int kingRow = kingLocation[0];
 			int kingCol = kingLocation[1];
 			int spotsToLookAt = Math.abs(kingRow - attackingRow) - 1;
@@ -440,9 +458,9 @@ public class ChessBoard {
 	}
 	
 	//finds the location of the current team's king
-	private Integer[] locationOfCurrentTeamsKing() {
+	private Integer[] locationOfTeamsKing(boolean isWhite) {
 		Map<ChessPiece, Integer[]> team;
-		if(whiteTurn) {
+		if(isWhite) {
 			team = whitePieces;
 		} else {
 			team = blackPieces;
