@@ -212,6 +212,7 @@ public class ChessBoard {
 	 * @param row The row of the spot
 	 * @param col The column of the spot
 	 * @return the chess piece at that spot, or null if no piece exists there
+	 * @throws IllegalArgumentException if the spot is out of bounds
 	 */
 	public ChessPiece getPieceAtSpot(int row, int col) {
 		if(!isInBounds(row, col)) {
@@ -221,12 +222,15 @@ public class ChessBoard {
 	}
 	
 	/**
-	 * checks the location of a given piece
+	 * checks the location of a given piece (of either team)
 	 * 
 	 * @param piece The piece to look at
 	 * @return the location of the piece on the board, in the form [row, col]
+	 * @throws IllegalStateException if the game is over
+	 * @throws IllegalArgumentException if the piece doesn't exist in the game
 	 */
 	public Integer[] getSpotOfPiece(ChessPiece piece) {
+		checkIfGameOver();
 		Map<ChessPiece, Integer[]> teamPieces;
 		if(piece.isWhite()) {
 			teamPieces = whitePieces;
@@ -244,9 +248,11 @@ public class ChessBoard {
 	 * 
 	 * @param piece The piece to find moves for
 	 * @return a set of all of the moves the piece can make, will be empty if it cannot make any
+	 * @throws IllegalStateException if the game is over
 	 * @throws IllegalArgumentException if it's not this team's turn or the piece doesn't exist in the game
 	 */
 	public Set<PieceMove> legalMoves(ChessPiece piece) {
+		checkIfGameOver();
 		checkInvalidPieceInput(piece);
 		return currentTeamMoves.get(piece);
 	}
@@ -258,17 +264,18 @@ public class ChessBoard {
 	 * @param row The row of the spot
 	 * @param col The column of the spot
 	 * @return The piece taken during this move, or null if no piece was taken
+	 * @throws IllegalStateException if the game is over
 	 * @throws IllegalArgumentException if the spot is out of bounds, it is not this team's turn,
 	 * the piece doesn't exist in the game, or the move is not valid
 	 */
 	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
-		if(!isInBounds(row, col)) {
-			throw new IllegalArgumentException("spot not in bounds");
-		}
 		PieceMove move = isValidMove(piece, row, col);
 		if(move == null) {
 			throw new IllegalArgumentException("invalid move");
+		} else if(!isInBounds(row, col)) {
+			throw new IllegalArgumentException("spot not in bounds");
 		}
+		
 		Integer[] currentLocation = getSpotOfPiece(piece);
 		Map<ChessPiece, Integer[]> thisTeam;
 		Map<ChessPiece, Integer[]> otherTeam;
@@ -305,8 +312,7 @@ public class ChessBoard {
 	//checks if it's valid to move that piece there
 	//returns the associated PieceMove object with that move
 	private PieceMove isValidMove(ChessPiece piece, int row, int col) {
-		checkInvalidPieceInput(piece);
-		Set<PieceMove> possiblePieceMoves = currentTeamMoves.get(piece);
+		Set<PieceMove> possiblePieceMoves = legalMoves(piece);
 		for(PieceMove move : possiblePieceMoves) {
 			if(move.destinationRow == row && move.destinationColumn == col) {
 				return move;
@@ -328,8 +334,10 @@ public class ChessBoard {
 	 * checks whose turn it is
 	 * 
 	 * @return true if it is white's turn, false if black's
+	 * @throws IllegalStateException if the game is over
 	 */
 	public boolean isWhiteTurn() {
+		checkIfGameOver();
 		return whiteTurn;
 	}
 	
@@ -348,8 +356,10 @@ public class ChessBoard {
 	 * finds all of the pawns that performed a double jump
 	 * 
 	 * @return the pawn currently in position to be taken en-passant, or null if there isn't one
+	 * @throws IllegalStateException if the game is over
 	 */
 	public ChessPiece pawnForEnPassant() {
+		checkIfGameOver();
 		return doubleJumpPawn;
 	}
 	
@@ -357,8 +367,10 @@ public class ChessBoard {
 	 * checks if the king of the current player is in check
 	 * 
 	 * @return true if he is, false otherwise
+	 * @throws IllegalStateException if the game is over
 	 */
 	public boolean curPlayerIsInCheck() {
+		checkIfGameOver();
 		return curPlayerInCheck;
 	}
 	
@@ -366,8 +378,13 @@ public class ChessBoard {
 	 * checks if a piece is causing the opponent's king to be in check
 	 * 
 	 * @return the location of the piece causing check if the current team is in check, null otherwise
+	 * @throws IllegalStateException if the game is over
 	 */
 	public Integer[] pieceCausingCheck() {
+		checkIfGameOver();
+		if(!curPlayerInCheck) {
+			return null;
+		}
 		if(whiteTurn) {
 			return blackPieces.get(pieceCausingCheck);
 		} else {
@@ -380,8 +397,10 @@ public class ChessBoard {
 	 * 
 	 * @return a map from rows to columns of spots on the board in the line of fire (including the
 	 * attacking piece). Will be null if the current player is not in check 
+	 * @throws IllegalStateException if the game is over
 	 */
 	public Map<Integer, Set<Integer>> inCheckLineOfFire() {
+		checkIfGameOver();
 		if(!curPlayerInCheck) {
 			return null;
 		}
@@ -506,6 +525,13 @@ public class ChessBoard {
 			throw new IllegalStateException("game not over");
 		}
 		return curPlayerInCheck;
+	}
+	
+	//throws exception if the game is over
+	private void checkIfGameOver() {
+		if(isGameOver()) {
+			throw new IllegalStateException("game not over");
+		}
 	}
 	
 	@Override
