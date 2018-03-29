@@ -3,6 +3,8 @@ package gameplay;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import javax.swing.*;
 import gamesetup.ChessBoard;
@@ -12,6 +14,7 @@ public class ChessFrame extends JFrame {
 	private ChessBoard chessBoard;
 	private Scanner input;
 	private ChessSpot[][] chessSpots;
+	private PieceIcons icons;
 	
 	public ChessFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,6 +23,8 @@ public class ChessFrame extends JFrame {
 		
 		input = new Scanner(System.in);
 		chessBoard = new ChessBoard(input);
+		icons = new PieceIcons();
+		
 		chessSpots = new ChessSpot[ChessBoard.SIZE][ChessBoard.SIZE];
 		JPanel spots = new JPanel();
 		spots.setLayout(new GridLayout(ChessBoard.SIZE, ChessBoard.SIZE));
@@ -42,6 +47,27 @@ public class ChessFrame extends JFrame {
 			} else {
 				setBackground(BLACK_SQUARE);
 			}
+		}
+	}
+	
+	private class PieceIcons {
+		public final Map<Boolean, Map<String, ImageIcon>> icons;
+		
+		public PieceIcons() {
+			icons = new HashMap<>();
+			String[] colors = {"white", "black"};
+			String[] pieces = {"Bishop", "King", "Knight", "Pawn", "Queen", "Rook"};
+			icons.put(true, loadIcons(colors[0], pieces));
+			icons.put(false, loadIcons(colors[1], pieces));
+		}
+		
+		private Map<String, ImageIcon> loadIcons(String color, String[] pieces) {
+			Map<String, ImageIcon> team = new HashMap<>();
+			for(String piece : pieces) {
+				String filename = color + "_" + piece.toLowerCase();
+				team.put(piece, new ImageIcon(getClass().getResource("/images/" + filename + ".png")));
+			}
+			return team;
 		}
 	}
 }
