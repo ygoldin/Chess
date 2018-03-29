@@ -16,6 +16,7 @@ public class ChessBoard {
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
 	private boolean curPlayerInCheck;
+	private boolean gameOver;
 	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
 	private ChessPiece doubleJumpPawn; //can only have at most one pawn available for en passant
 	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
@@ -306,6 +307,7 @@ public class ChessBoard {
 		//TODO: make sure to:
 		//check for kings in check
 		//check if a move puts a king in check (by the moved piece or any other piece)
+		gameOver = currentTeamMoves.isEmpty();
 		return move.takenPiece;
 	}
 	
@@ -511,7 +513,7 @@ public class ChessBoard {
 	 * @return true if the game is over, false otherwise
 	 */
 	public boolean isGameOver() {
-		return currentTeamMoves.isEmpty();
+		return gameOver;
 	}
 	
 	/**
