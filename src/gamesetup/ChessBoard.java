@@ -358,6 +358,20 @@ public class ChessBoard {
 		}
 	}
 	
+	/**
+	 * checks if it's valid to move the given piece to that location
+	 * 
+	 * @param piece The piece to move
+	 * @param row The row to move to
+	 * @param col The column to move to
+	 * @return true if the move is valid, false otherwise
+	 * @throws IllegalStateException if the game is over
+	 * @throws IllegalArgumentException if it's not this team's turn or the piece doesn't exist in the game
+	 */
+	public boolean validMove(ChessPiece piece, int row, int col) {
+		return isValidMove(piece, row, col) != null;
+	}
+	
 	//checks if it's valid to move that piece there
 	//returns the associated PieceMove object with that move
 	private PieceMove isValidMove(ChessPiece piece, int row, int col) {

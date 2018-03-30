@@ -16,7 +16,8 @@ public class ChessFrame extends JFrame {
 	private ChessBoard chessBoard;
 	private Scanner input;
 	private ChessSpot[][] chessSpots;
-	private PieceIcons icons;
+	private final PieceIcons icons;
+	private int[] pieceToMove;
 	
 	public ChessFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,15 +46,17 @@ public class ChessFrame extends JFrame {
 	
 	private void setupInitialIcons(boolean white) {
 		Map<ChessPiece, Integer[]> teamPieces = chessBoard.getAllPieces(white);
-		Map<String, ImageIcon> teamIcons = icons.icons.get(white);
 		for(ChessPiece piece : teamPieces.keySet()) {
 			Integer[] location = teamPieces.get(piece);
-			String name = piece.getClass().getName();
-			name = name.substring(name.indexOf(".") + 1);
-			ImageIcon image = teamIcons.get(name);
 			ChessSpot spot = chessSpots[location[0]][location[1]]; 
-			spot.updateIcon(image);
+			spot.updateIcon(getPieceIcon(piece));
 		}
+	}
+	
+	private ImageIcon getPieceIcon(ChessPiece piece) {
+		String name = piece.getClass().getName();
+		name = name.substring(name.indexOf(".") + 1);
+		return icons.icons.get(piece.isWhite()).get(name);
 	}
 	
 	private class ChessSpot extends JButton {
@@ -67,6 +70,27 @@ public class ChessFrame extends JFrame {
 			} else {
 				setBackground(BLACK_SQUARE);
 			}
+			addActionListener(e -> {
+				if(pieceToMove == null) {
+					ChessPiece curPiece = chessBoard.getPieceAtSpot(row, col);
+					if(curPiece != null && curPiece.isTeamsTurn(chessBoard)) {
+						pieceToMove = new int[] {row, col};
+					}
+				} else {
+					ChessPiece movingPiece = chessBoard.getPieceAtSpot(pieceToMove[0], pieceToMove[1]);
+					if(chessBoard.validMove(movingPiece, row, col)) {
+						ChessPiece taken = chessBoard.makeMove(movingPiece, row, col);
+						if(taken != null) {
+							Integer[] takenLocation = chessBoard.getSpotOfPiece(taken);
+							chessSpots[takenLocation[0]][takenLocation[1]].setIcon(null);
+						}
+						chessSpots[pieceToMove[0]][pieceToMove[1]].setIcon(null);
+						ImageIcon pieceIcon = getPieceIcon(movingPiece);
+						chessSpots[row][col].updateIcon(pieceIcon);
+					}
+					pieceToMove = null;
+				}
+			});
 		}
 		
 		public void updateIcon(ImageIcon image) {
