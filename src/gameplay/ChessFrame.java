@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 import javax.swing.*;
 import gamesetup.*;
-import pieces.ChessPiece;
+import pieces.*;
 
 @SuppressWarnings("serial")
 public class ChessFrame extends JFrame {
@@ -87,11 +87,25 @@ public class ChessFrame extends JFrame {
 							chessSpots[pieceToMove[0]][pieceToMove[1]].setIcon(null);
 							ImageIcon pieceIcon = getPieceIcon(movingPiece);
 							chessSpots[row][col].updateIcon(pieceIcon);
+							//castling
+							if(movingPiece instanceof King && Math.abs(pieceToMove[1] - col) == 2) {
+								if(col > pieceToMove[1]) { //right rook
+									moveCastleRook(row, ChessBoard.SIZE - 1, pieceToMove[1] + 1);
+								} else { //left rook
+									moveCastleRook(row, 0, pieceToMove[1] - 1);
+								}
+							}
 						}
 						pieceToMove = null;
 					}
 				}
 			});
+		}
+		
+		private void moveCastleRook(int row, int oldRookCol, int newRookCol) {
+			chessSpots[row][oldRookCol].setIcon(null);
+			ImageIcon rookIcon = getPieceIcon(chessBoard.getPieceAtSpot(row, newRookCol));
+			chessSpots[row][newRookCol].updateIcon(rookIcon);
 		}
 		
 		public void updateIcon(ImageIcon image) {
