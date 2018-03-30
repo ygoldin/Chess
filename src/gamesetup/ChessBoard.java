@@ -323,6 +323,14 @@ public class ChessBoard {
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
 		thisTeam.put(piece, newLocation);
+		//castle
+		if(piece instanceof King && Math.abs(currentLocation[1] - col) == 2) {
+			if(col > currentLocation[1]) { //right rook
+				castleRook(row, SIZE - 1, currentLocation[1] + 1, thisTeam);
+			} else { //left rook
+				castleRook(row, 0, currentLocation[1] - 1, thisTeam);
+			}
+		}
 		//possibly causing check
 		Integer[] otherKingLocation = locationOfTeamsKing(!whiteTurn);
 		ChessPiece otherKing = getPieceAtSpot(otherKingLocation[0], otherKingLocation[1]);
@@ -342,6 +350,13 @@ public class ChessBoard {
 		currentTeamMoves = this.findCurrentTeamsMoves();
 		gameOver = currentTeamMoves.isEmpty();
 		return takenLocation;
+	}
+	
+	private void castleRook(int row, int curRookCol, int newRookCol, Map<ChessPiece, Integer[]> thisTeam) {
+		ChessPiece castleRook = getPieceAtSpot(row, curRookCol);
+		board[row][curRookCol] = null;
+		board[row][newRookCol] = castleRook;
+		thisTeam.put(castleRook, new Integer[]{row, newRookCol});
 	}
 	
 	private ChessPiece promotePawn() {
