@@ -59,6 +59,26 @@ public class ChessFrame extends JFrame {
 		return icons.icons.get(piece.isWhite()).get(name);
 	}
 	
+	private void gameOverActions() {
+		String message;
+		if(chessBoard.endedInCheckmate()) {
+			message = "Checkmate!";
+		} else {
+			message = "Stalemate - it's a draw";
+		}
+		if(JOptionPane.showConfirmDialog(this, message, "Play again?", JOptionPane.YES_NO_OPTION)
+				== JOptionPane.YES_OPTION) { //play again
+			chessBoard = new ChessBoard(input);
+			for(int r = 0; r < ChessBoard.SIZE; r++) {
+				for(int c = 0; c < ChessBoard.SIZE; c++) {
+					chessSpots[r][c].setIcon(null);
+				}
+			}
+			setupInitialIcons(true);
+			setupInitialIcons(false);
+		}
+	}
+	
 	private class ChessSpot extends JButton {
 		private final Color WHITE_SQUARE = Color.WHITE;
 		private final Color BLACK_SQUARE = new Color(139,69,19);
@@ -97,6 +117,9 @@ public class ChessFrame extends JFrame {
 							}
 						}
 						pieceToMove = null;
+					}
+					if(chessBoard.isGameOver()) {
+						gameOverActions();
 					}
 				}
 			});
