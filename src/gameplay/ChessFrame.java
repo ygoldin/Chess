@@ -71,24 +71,25 @@ public class ChessFrame extends JFrame {
 				setBackground(BLACK_SQUARE);
 			}
 			addActionListener(e -> {
-				if(pieceToMove == null) {
-					ChessPiece curPiece = chessBoard.getPieceAtSpot(row, col);
-					if(curPiece != null && curPiece.isTeamsTurn(chessBoard)) {
-						pieceToMove = new int[] {row, col};
-					}
-				} else {
-					ChessPiece movingPiece = chessBoard.getPieceAtSpot(pieceToMove[0], pieceToMove[1]);
-					if(chessBoard.validMove(movingPiece, row, col)) {
-						ChessPiece taken = chessBoard.makeMove(movingPiece, row, col);
-						if(taken != null) {
-							Integer[] takenLocation = chessBoard.getSpotOfPiece(taken);
-							chessSpots[takenLocation[0]][takenLocation[1]].setIcon(null);
+				if(!chessBoard.isGameOver()) {
+					if(pieceToMove == null) {
+						ChessPiece curPiece = chessBoard.getPieceAtSpot(row, col);
+						if(curPiece != null && curPiece.isTeamsTurn(chessBoard)) {
+							pieceToMove = new int[] {row, col};
 						}
-						chessSpots[pieceToMove[0]][pieceToMove[1]].setIcon(null);
-						ImageIcon pieceIcon = getPieceIcon(movingPiece);
-						chessSpots[row][col].updateIcon(pieceIcon);
+					} else {
+						ChessPiece movingPiece = chessBoard.getPieceAtSpot(pieceToMove[0], pieceToMove[1]);
+						if(chessBoard.validMove(movingPiece, row, col)) {
+							Integer[] takenLocation = chessBoard.makeMove(movingPiece, row, col);
+							if(takenLocation != null) {
+								chessSpots[takenLocation[0]][takenLocation[1]].setIcon(null);
+							}
+							chessSpots[pieceToMove[0]][pieceToMove[1]].setIcon(null);
+							ImageIcon pieceIcon = getPieceIcon(movingPiece);
+							chessSpots[row][col].updateIcon(pieceIcon);
+						}
+						pieceToMove = null;
 					}
-					pieceToMove = null;
 				}
 			});
 		}

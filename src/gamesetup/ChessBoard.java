@@ -272,12 +272,12 @@ public class ChessBoard {
 	 * @param piece The piece to move
 	 * @param row The row of the spot
 	 * @param col The column of the spot
-	 * @return The piece taken during this move, or null if no piece was taken
+	 * @return The spot of the piece taken during this move, or null if no piece was taken
 	 * @throws IllegalStateException if the game is over
 	 * @throws IllegalArgumentException if the spot is out of bounds, it is not this team's turn,
 	 * the piece doesn't exist in the game, or the move is not valid
 	 */
-	public ChessPiece makeMove(ChessPiece piece, int row, int col) {
+	public Integer[] makeMove(ChessPiece piece, int row, int col) {
 		PieceMove move = isValidMove(piece, row, col);
 		if(move == null) {
 			throw new IllegalArgumentException("invalid move");
@@ -311,12 +311,14 @@ public class ChessBoard {
 			}
 		}
 		//remove taken piece
+		Integer[] takenLocation = null;
 		if(move.takenPiece != null) {
-			Integer[] takenLocation = getSpotOfPiece(move.takenPiece);
+			takenLocation = getSpotOfPiece(move.takenPiece);
 			otherTeam.remove(move.takenPiece);
 			board[takenLocation[0]][takenLocation[1]] = null;
 		}
 		//move piece
+		//TODO: castle
 		board[currentLocation[0]][currentLocation[1]] = null;
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
@@ -339,7 +341,7 @@ public class ChessBoard {
 		whiteTurn = !whiteTurn;
 		currentTeamMoves = this.findCurrentTeamsMoves();
 		gameOver = currentTeamMoves.isEmpty();
-		return move.takenPiece;
+		return takenLocation;
 	}
 	
 	private ChessPiece promotePawn() {
