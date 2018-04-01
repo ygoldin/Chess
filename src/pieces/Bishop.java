@@ -41,11 +41,9 @@ public class Bishop extends ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(isTeamsTurn(board)) {
-			Integer[] myLocation = board.getSpotOfPiece(this);
-			diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
-			leaveMovesThatStopCheck(moves, board);
-		}
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		leaveMovesThatStopCheck(moves, board);
 		return moves;
 	}
 	

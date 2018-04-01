@@ -43,33 +43,31 @@ public class King extends ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(isTeamsTurn(board)) {
-			Integer[] myLocation = board.getSpotOfPiece(this);
-			int myRow = myLocation[0];
-			int myCol = myLocation[1];
-			Map<Integer, Set<Integer>> illegalMoves = movesIntoALineOfFire(board);
-			for(int curRow = myRow - 1; curRow <= myRow + 1; curRow++) {
-				for(int curCol = myCol - 1; curCol <= myCol + 1; curCol++) {
-					//first check for not staying still, going out of bounds, or going into a line of fire
-					if((curRow != myRow || curCol != myCol) && board.isInBounds(curRow, curCol) &&
-							(!illegalMoves.containsKey(curRow) ||
-							!illegalMoves.get(curRow).contains(curCol))) {
-						ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-						if(otherPiece == null || !isSameTeam(otherPiece)) {
-							moves.add(new PieceMove(curRow, curCol, otherPiece));
-						}
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		int myRow = myLocation[0];
+		int myCol = myLocation[1];
+		Map<Integer, Set<Integer>> illegalMoves = movesIntoALineOfFire(board);
+		for(int curRow = myRow - 1; curRow <= myRow + 1; curRow++) {
+			for(int curCol = myCol - 1; curCol <= myCol + 1; curCol++) {
+				//first check for not staying still, going out of bounds, or going into a line of fire
+				if((curRow != myRow || curCol != myCol) && board.isInBounds(curRow, curCol) &&
+						(!illegalMoves.containsKey(curRow) ||
+						!illegalMoves.get(curRow).contains(curCol))) {
+					ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
+					if(otherPiece == null || !isSameTeam(otherPiece)) {
+						moves.add(new PieceMove(curRow, curCol, otherPiece));
 					}
 				}
 			}
-			//check if the king can castle
-			if(!hasMoved && !board.curPlayerIsInCheck()) { //can't castle if king has moved/is in check
-				if(canCastle(myRow, 0, myCol - 2, myCol - 1, board, illegalMoves)) { //castle left
-					moves.add(new PieceMove(myRow, myCol - 2));
-				}
-				if(canCastle(myRow, ChessBoard.SIZE - 1, myCol + 1, ChessBoard.SIZE - 2, board,
-						illegalMoves)) { //castle right
-					moves.add(new PieceMove(myRow, myCol + 2));
-				}
+		}
+		//check if the king can castle
+		if(!hasMoved && !board.curPlayerIsInCheck()) { //can't castle if king has moved/is in check
+			if(canCastle(myRow, 0, myCol - 2, myCol - 1, board, illegalMoves)) { //castle left
+				moves.add(new PieceMove(myRow, myCol - 2));
+			}
+			if(canCastle(myRow, ChessBoard.SIZE - 1, myCol + 1, ChessBoard.SIZE - 2, board,
+					illegalMoves)) { //castle right
+				moves.add(new PieceMove(myRow, myCol + 2));
 			}
 		}
 		return moves;
@@ -79,8 +77,11 @@ public class King extends ChessPiece {
 	//not all are necessarily reachable for the king at this point in the game, but that doesn't affect
 	//the final outcome since the king just needs to know where it can't go, not where it can
 	private Map<Integer, Set<Integer>> movesIntoALineOfFire(ChessBoard board) {
-		Map<ChessPiece, Integer[]> otherTeam = board.getAllPieces(!isWhite);
 		Map<Integer, Set<Integer>> result = new HashMap<>();
+		if(!isTeamsTurn(board)) { //if not this teams turn, don't restrict it's attacks
+			return result;
+		}
+		Map<ChessPiece, Integer[]> otherTeam = board.getAllPieces(!isWhite);
 		for(ChessPiece opposingPiece : otherTeam.keySet()) {
 			if(!(opposingPiece instanceof Pawn)) {
 				for(PieceMove move : opposingPiece.legalMoves(board)){

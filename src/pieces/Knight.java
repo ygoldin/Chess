@@ -41,20 +41,18 @@ public class Knight extends ChessPiece {
 	@Override
 	public Set<PieceMove> legalMoves(ChessBoard board) {
 		Set<PieceMove> moves = new HashSet<>();
-		if(isTeamsTurn(board)) {
-			int[] firstDirection = new int[] {1, -1};
-			int[] secondDirection = new int[] {2, -2};
-			Integer[] myLocation = board.getSpotOfPiece(this);
-			int myRow = myLocation[0];
-			int myCol = myLocation[1];
-			for(int direction1 : firstDirection) {
-				for(int direction2 : secondDirection) {
-					checkMove(myRow + direction1, myCol + direction2, board, moves);
-					checkMove(myRow + direction2, myCol + direction1, board, moves);
-				}
+		int[] firstDirection = new int[] {1, -1};
+		int[] secondDirection = new int[] {2, -2};
+		Integer[] myLocation = board.getSpotOfPiece(this);
+		int myRow = myLocation[0];
+		int myCol = myLocation[1];
+		for(int direction1 : firstDirection) {
+			for(int direction2 : secondDirection) {
+				checkMove(myRow + direction1, myCol + direction2, board, moves);
+				checkMove(myRow + direction2, myCol + direction1, board, moves);
 			}
-			leaveMovesThatStopCheck(moves, board);
 		}
+		leaveMovesThatStopCheck(moves, board);
 		return moves;
 	}
 	
