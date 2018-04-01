@@ -11,6 +11,10 @@ import javax.swing.*;
 import gamesetup.*;
 import pieces.*;
 
+/**
+ * ChessFrame can be used to view/control a game of chess via a GUI
+ * @author Yael Goldin
+ */
 @SuppressWarnings("serial")
 public class ChessFrame extends JFrame {
 	private ChessBoard chessBoard;
@@ -19,6 +23,9 @@ public class ChessFrame extends JFrame {
 	private final PieceIcons icons;
 	private int[] pieceToMove;
 	
+	/**
+	 * initializes the GUI frame
+	 */
 	public ChessFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(1024, 768));
@@ -44,6 +51,7 @@ public class ChessFrame extends JFrame {
 		setupInitialIcons(false);
 	}
 	
+	//sets up the icons of the initial spots with pieces
 	private void setupInitialIcons(boolean white) {
 		Map<ChessPiece, Integer[]> teamPieces = chessBoard.getAllPieces(white);
 		for(ChessPiece piece : teamPieces.keySet()) {
@@ -53,12 +61,14 @@ public class ChessFrame extends JFrame {
 		}
 	}
 	
+	//gets the icon of a piece
 	private ImageIcon getPieceIcon(ChessPiece piece) {
 		String name = piece.getClass().getName();
 		name = name.substring(name.indexOf(".") + 1);
 		return icons.icons.get(piece.isWhite()).get(name);
 	}
 	
+	//performs the end of game actions
 	private void gameOverActions() {
 		String message;
 		if(chessBoard.endedInCheckmate()) {
@@ -79,10 +89,17 @@ public class ChessFrame extends JFrame {
 		}
 	}
 	
+	//this class represents one spot on the chess board
 	private class ChessSpot extends JButton {
 		private final Color WHITE_SQUARE = Color.WHITE;
 		private final Color BLACK_SQUARE = new Color(139,69,19);
 		
+		/**
+		 * constructs the given spot on the board
+		 * 
+		 * @param row The row of the spot
+		 * @param col The column of the spot
+		 */
 		public ChessSpot(int row, int col) {
 			super();
 			if((row + col) % 2 == 0) {
@@ -125,12 +142,18 @@ public class ChessFrame extends JFrame {
 			});
 		}
 		
+		//moves the rook if castling occured
 		private void moveCastleRook(int row, int oldRookCol, int newRookCol) {
 			chessSpots[row][oldRookCol].setIcon(null);
 			ImageIcon rookIcon = getPieceIcon(chessBoard.getPieceAtSpot(row, newRookCol));
 			chessSpots[row][newRookCol].updateIcon(rookIcon);
 		}
 		
+		/**
+		 * updates the icon of the spot
+		 * 
+		 * @param image The icon to update to
+		 */
 		public void updateIcon(ImageIcon image) {
 			int height = getHeight();
 			Image scaled = image.getImage().getScaledInstance(-1, height, Image.SCALE_SMOOTH);
@@ -138,9 +161,13 @@ public class ChessFrame extends JFrame {
 		}
 	}
 	
+	//this class stores all of the icons of the different piece types
 	private class PieceIcons {
 		public final Map<Boolean, Map<String, ImageIcon>> icons;
 		
+		/**
+		 * initializes all of the icons
+		 */
 		public PieceIcons() {
 			icons = new HashMap<>();
 			String[] colors = {"white", "black"};
@@ -149,6 +176,7 @@ public class ChessFrame extends JFrame {
 			icons.put(false, loadIcons(colors[1], pieces));
 		}
 		
+		//loads the icons of the given team
 		private Map<String, ImageIcon> loadIcons(String color, String[] pieces) {
 			Map<String, ImageIcon> team = new HashMap<>();
 			for(String piece : pieces) {

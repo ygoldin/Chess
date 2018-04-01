@@ -90,14 +90,4 @@ public class Rook extends ChessPiece {
 			}
 		}
 	}
-	
-	@Override
-	public boolean hasMoved() {
-		return hasMoved;
-	}
-
-	@Override
-	public void markMoved() {
-		hasMoved = true;
-	}
 }
