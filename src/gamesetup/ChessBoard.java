@@ -10,6 +10,10 @@ import java.util.Set;
 
 import pieces.*;
 
+/**
+ * ChessBoard can be used to model a game of chess
+ * @author Yael Goldin
+ */
 public class ChessBoard {
 	public static final int SIZE = 8;
 	private final Scanner input;
@@ -24,6 +28,11 @@ public class ChessBoard {
 	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
 	private Integer[] currentTeamsKingLocation;
 	
+	/**
+	 * initializes a board
+	 * 
+	 * @param input The scanner to use for input on pawn promotion
+	 */
 	public ChessBoard(Scanner input) {
 		this.input = input;
 		board = new ChessPiece[SIZE][SIZE];
@@ -317,7 +326,6 @@ public class ChessBoard {
 			board[takenLocation[0]][takenLocation[1]] = null;
 		}
 		//move piece
-		//TODO: castle
 		board[currentLocation[0]][currentLocation[1]] = null;
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
@@ -348,10 +356,11 @@ public class ChessBoard {
 		//find moves of other team now
 		whiteTurn = !whiteTurn;
 		currentTeamMoves = this.findCurrentTeamsMoves();
-		gameOver = noPieceHasMoves();
+		gameOver = noPieceHasMoves() || onlyKingsLeft();
 		return takenLocation;
 	}
 	
+	//returns true if no piece on the current team has any moves
 	private boolean noPieceHasMoves() {
 		for(ChessPiece piece : currentTeamMoves.keySet()) {
 			if(!currentTeamMoves.get(piece).isEmpty()) {
@@ -361,6 +370,12 @@ public class ChessBoard {
 		return true;
 	}
 	
+	//returns true if only kings are left - stalemate
+	private boolean onlyKingsLeft() {
+		return whitePieces.size() == 1 && blackPieces.size() == 1;
+	}
+	
+	//performs the castling with the given rook
 	private void castleRook(int row, int curRookCol, int newRookCol, Map<ChessPiece, Integer[]> thisTeam) {
 		ChessPiece castleRook = getPieceAtSpot(row, curRookCol);
 		board[row][curRookCol] = null;
@@ -368,6 +383,7 @@ public class ChessBoard {
 		thisTeam.put(castleRook, new Integer[]{row, newRookCol});
 	}
 	
+	//returns a piece that the pawn is promoted to based on input
 	private ChessPiece promotePawn() {
 		System.out.println("What piece do you want to promote to? (queen, rook, bishop, knight) "); 
 		String type = input.nextLine();
