@@ -630,7 +630,7 @@ public class ChessBoard {
 	//throws exception if the game is over
 	private void checkIfGameOver() {
 		if(isGameOver()) {
-			throw new IllegalStateException("game not over");
+			throw new IllegalStateException("game is over");
 		}
 	}
 	
