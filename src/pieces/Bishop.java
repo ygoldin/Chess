@@ -43,7 +43,9 @@ public class Bishop extends ChessPiece {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
-		leaveMovesThatStopCheck(moves, board);
+		if(isTeamsTurn(board)) {
+			leaveMovesThatStopCheck(moves, board);
+		}
 		return moves;
 	}
 	

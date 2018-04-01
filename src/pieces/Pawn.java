@@ -68,7 +68,9 @@ public class Pawn extends ChessPiece {
 			checkEnPassant(myRow, myCol - 1, board, moves, direction);
 			checkEnPassant(myRow, myCol + 1, board, moves, direction);
 		}
-		leaveMovesThatStopCheck(moves, board);
+		if(isTeamsTurn(board)) {
+			leaveMovesThatStopCheck(moves, board);
+		}
 		return moves;
 	}
 	

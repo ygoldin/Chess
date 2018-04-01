@@ -44,7 +44,9 @@ public class Rook extends ChessPiece {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
-		leaveMovesThatStopCheck(moves, board);
+		if(isTeamsTurn(board)) {
+			leaveMovesThatStopCheck(moves, board);
+		}
 		return moves;
 	}
 	

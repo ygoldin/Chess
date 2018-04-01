@@ -44,7 +44,9 @@ public class Queen extends ChessPiece {
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		Rook.straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
 		Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
-		leaveMovesThatStopCheck(moves, board);
+		if(isTeamsTurn(board)) {
+			leaveMovesThatStopCheck(moves, board);
+		}
 		return moves;
 	}
 }
