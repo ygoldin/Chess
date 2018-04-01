@@ -39,10 +39,10 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
-		diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves, findingProtectedSpots);
 		if(isTeamsTurn(board)) {
 			leaveMovesThatStopCheck(moves, board);
 		}
@@ -59,17 +59,22 @@ public class Bishop extends ChessPiece {
 	 * @param moves The set to add possible found moves to
 	 */
 	public static void diagonalMoves(int pieceRow, int pieceCol, boolean pieceIsWhite,
-			ChessBoard board, Set<PieceMove> moves) {
-		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, -1, pieceIsWhite, board, moves); //up left
-		diagonalMovesInDirection(pieceRow - 1, pieceCol + 1, -1, 1, pieceIsWhite, board, moves); //up right
-		diagonalMovesInDirection(pieceRow + 1, pieceCol - 1, 1, -1, pieceIsWhite, board, moves); //down left
-		diagonalMovesInDirection(pieceRow + 1, pieceCol + 1, 1, 1, pieceIsWhite, board, moves); //down right
+			ChessBoard board, Set<PieceMove> moves, boolean findingProtectedSpots) {
+		diagonalMovesInDirection(pieceRow - 1, pieceCol - 1, -1, -1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //up left
+		diagonalMovesInDirection(pieceRow - 1, pieceCol + 1, -1, 1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //up right
+		diagonalMovesInDirection(pieceRow + 1, pieceCol - 1, 1, -1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //down left
+		diagonalMovesInDirection(pieceRow + 1, pieceCol + 1, 1, 1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //down right
 	}
 	
 	//adds all of the diagonal moves in the given direction where the row and column increase by
 	//the given direction amount on each iteration to represent going in one of the four diagonal directions
 	private static void diagonalMovesInDirection(int curRow, int curCol, int rowDirection,
-			int colDirection, boolean pieceIsWhite, ChessBoard board, Set<PieceMove> moves) {
+			int colDirection, boolean pieceIsWhite, ChessBoard board, Set<PieceMove> moves,
+			boolean findingProtectedSpots) {
 		while(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
 			if(otherPiece == null) { //can keep going in this direction
@@ -77,7 +82,7 @@ public class Bishop extends ChessPiece {
 				curRow += rowDirection;
 				curCol += colDirection;
 			} else { //there's another piece, you can't move past it
-				if(otherPiece.isWhite() != pieceIsWhite) { //can take it TODO can't call isSameTeam
+				if(findingProtectedSpots || otherPiece.isWhite() != pieceIsWhite) {
 					moves.add(new PieceMove(curRow, curCol, otherPiece));
 				}
 				break;

@@ -37,9 +37,9 @@ public class Knight extends ChessPiece {
 	public boolean isWhite() {
 		return isWhite;
 	}
-
+	
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		int[] firstDirection = new int[] {1, -1};
 		int[] secondDirection = new int[] {2, -2};
@@ -48,8 +48,8 @@ public class Knight extends ChessPiece {
 		int myCol = myLocation[1];
 		for(int direction1 : firstDirection) {
 			for(int direction2 : secondDirection) {
-				checkMove(myRow + direction1, myCol + direction2, board, moves);
-				checkMove(myRow + direction2, myCol + direction1, board, moves);
+				checkMove(myRow + direction1, myCol + direction2, board, moves, findingProtectedSpots);
+				checkMove(myRow + direction2, myCol + direction1, board, moves, findingProtectedSpots);
 			}
 		}
 		if(isTeamsTurn(board)) {
@@ -59,10 +59,11 @@ public class Knight extends ChessPiece {
 	}
 	
 	//checks if the knight can move to that spot and what it might take
-	private void checkMove(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves) {
+	private void checkMove(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves,
+			boolean findingProtectedSpots) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece == null || !isSameTeam(otherPiece)) {
+			if(otherPiece == null || findingProtectedSpots || !isSameTeam(otherPiece)) {
 				moves.add(new PieceMove(curRow, curCol, otherPiece));
 			}
 		}

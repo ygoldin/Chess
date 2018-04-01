@@ -38,7 +38,7 @@ public class Pawn extends ChessPiece {
 	}
 
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		int myRow = myLocation[0];
@@ -61,8 +61,8 @@ public class Pawn extends ChessPiece {
 			}
 		}
 		//check if you can take a piece diagonally to the left, then right
-		checkTakingDiagonally(oneRowForward, myCol - 1, board, moves);
-		checkTakingDiagonally(oneRowForward, myCol + 1, board, moves);
+		checkTakingDiagonally(oneRowForward, myCol - 1, board, moves, findingProtectedSpots);
+		checkTakingDiagonally(oneRowForward, myCol + 1, board, moves, findingProtectedSpots);
 		//check if you can perform en passant
 		if(board.pawnForEnPassant() != null) {
 			checkEnPassant(myRow, myCol - 1, board, moves, direction);
@@ -75,10 +75,11 @@ public class Pawn extends ChessPiece {
 	}
 	
 	//checks if you can take a piece in that spot and then adds it to the moves
-	private void checkTakingDiagonally(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves) {
+	private void checkTakingDiagonally(int curRow, int curCol, ChessBoard board, Set<PieceMove> moves,
+			boolean findingProtectedSpots) {
 		if(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
-			if(otherPiece != null && !isSameTeam(otherPiece)) { //piece of other color
+			if(otherPiece != null && (findingProtectedSpots || !isSameTeam(otherPiece))) {
 				moves.add(new PieceMove(curRow, curCol, otherPiece));
 			}
 		}

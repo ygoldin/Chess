@@ -39,11 +39,11 @@ public class Queen extends ChessPiece {
 	}
 
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
-		Rook.straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
-		Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		Rook.straightMoves(myLocation[0], myLocation[1], isWhite, board, moves, findingProtectedSpots);
+		Bishop.diagonalMoves(myLocation[0], myLocation[1], isWhite, board, moves, findingProtectedSpots);
 		if(isTeamsTurn(board)) {
 			leaveMovesThatStopCheck(moves, board);
 		}

@@ -41,7 +41,7 @@ public class King extends ChessPiece {
 	}
 
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
 		int myRow = myLocation[0];
@@ -84,7 +84,8 @@ public class King extends ChessPiece {
 		Map<ChessPiece, Integer[]> otherTeam = board.getAllPieces(!isWhite);
 		for(ChessPiece opposingPiece : otherTeam.keySet()) {
 			if(!(opposingPiece instanceof Pawn)) {
-				for(PieceMove move : opposingPiece.legalMoves(board)){
+				Set<PieceMove> possible = opposingPiece.legalMoves(board, true);
+				for(PieceMove move : possible){
 					if(!result.containsKey(move.destinationRow)) {
 						result.put(move.destinationRow, new HashSet<Integer>());
 					}

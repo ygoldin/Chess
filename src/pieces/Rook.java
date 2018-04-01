@@ -40,10 +40,10 @@ public class Rook extends ChessPiece {
 	}
 
 	@Override
-	public Set<PieceMove> legalMoves(ChessBoard board) {
+	public Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots) {
 		Set<PieceMove> moves = new HashSet<>();
 		Integer[] myLocation = board.getSpotOfPiece(this);
-		straightMoves(myLocation[0], myLocation[1], isWhite, board, moves);
+		straightMoves(myLocation[0], myLocation[1], isWhite, board, moves, findingProtectedSpots);
 		if(isTeamsTurn(board)) {
 			leaveMovesThatStopCheck(moves, board);
 		}
@@ -60,17 +60,22 @@ public class Rook extends ChessPiece {
 	 * @param moves The set to add possible found moves to
 	 */
 	public static void straightMoves(int pieceRow, int pieceCol, boolean pieceIsWhite,
-			ChessBoard board, Set<PieceMove> moves) {
-		straightMovesInDirection(pieceRow - 1, pieceCol, -1, 0, pieceIsWhite, board, moves); //up
-		straightMovesInDirection(pieceRow + 1, pieceCol, 1, 0, pieceIsWhite, board, moves); //down
-		straightMovesInDirection(pieceRow, pieceCol - 1, 0, -1, pieceIsWhite, board, moves); //left
-		straightMovesInDirection(pieceRow, pieceCol + 1, 0, 1, pieceIsWhite, board, moves); //right
+			ChessBoard board, Set<PieceMove> moves, boolean findingProtectedSpots) {
+		straightMovesInDirection(pieceRow - 1, pieceCol, -1, 0, pieceIsWhite, board, moves,
+				findingProtectedSpots); //up
+		straightMovesInDirection(pieceRow + 1, pieceCol, 1, 0, pieceIsWhite, board, moves,
+				findingProtectedSpots); //down
+		straightMovesInDirection(pieceRow, pieceCol - 1, 0, -1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //left
+		straightMovesInDirection(pieceRow, pieceCol + 1, 0, 1, pieceIsWhite, board, moves,
+				findingProtectedSpots); //right
 	}
 	
 	//adds all of the diagonal moves in the given direction where the row and column increase by
 	//the given direction amount on each iteration to represent going in one of the four diagonal directions
 	private static void straightMovesInDirection(int curRow, int curCol, int rowDirection,
-			int colDirection, boolean pieceIsWhite, ChessBoard board, Set<PieceMove> moves) {
+			int colDirection, boolean pieceIsWhite, ChessBoard board, Set<PieceMove> moves,
+			boolean findingProtectedSpots) {
 		while(board.isInBounds(curRow, curCol)) {
 			ChessPiece otherPiece = board.getPieceAtSpot(curRow, curCol);
 			if(otherPiece == null) { //can keep going in this direction
@@ -78,7 +83,7 @@ public class Rook extends ChessPiece {
 				curRow += rowDirection;
 				curCol += colDirection;
 			} else {
-				if(otherPiece.isWhite() != pieceIsWhite) { //can take it TODO cant use isSameTeam()
+				if(findingProtectedSpots || otherPiece.isWhite() != pieceIsWhite) {
 					moves.add(new PieceMove(curRow, curCol, otherPiece));
 				}
 				break; //if there's another piece, you can't move past it

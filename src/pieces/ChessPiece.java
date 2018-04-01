@@ -37,13 +37,29 @@ public abstract class ChessPiece {
 	 * finds all of the moves this piece can make
 	 * 
 	 * @param board The chess board the piece is on
+	 * @param findingProtectedSpots whether to add spots that would "attack" its own teammate
+	 * should be true when looking for which spots this piece protects
 	 * @return a set of all of the moves the piece can make: will be empty if it's not the turn
 	 * of this piece's team or no legal moves can be made
 	 * NOTE: this accounts for if the king is in check, only moves to go protect him can be made
 	 * NOTE: this does not account for whether the piece is currently protecting the king from a
 	 * possible check
 	 */
-	public abstract Set<PieceMove> legalMoves(ChessBoard board);
+	public abstract Set<PieceMove> legalMoves(ChessBoard board, boolean findingProtectedSpots);
+	
+	/**
+	 * finds all of the moves this piece can make
+	 * 
+	 * @param board The chess board the piece is on
+	 * @return a set of all of the moves the piece can make: will be empty if it's not the turn
+	 * of this piece's team or no legal moves can be made
+	 * NOTE: this accounts for if the king is in check, only moves to go protect him can be made
+	 * NOTE: this does not account for whether the piece is currently protecting the king from a
+	 * possible check
+	 */
+	public Set<PieceMove> legalMoves(ChessBoard board) {
+		return legalMoves(board, false);
+	}
 	
 	/**
 	 * checks if the piece has never moved during the game
