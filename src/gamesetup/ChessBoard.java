@@ -330,6 +330,7 @@ public class ChessBoard {
 		board[row][col] = piece;
 		Integer[] newLocation = new Integer[] {row, col};
 		thisTeam.put(piece, newLocation);
+		piece.markMoved();
 		//castle
 		if(piece instanceof King && Math.abs(currentLocation[1] - col) == 2) {
 			if(col > currentLocation[1]) { //right rook
@@ -355,6 +356,8 @@ public class ChessBoard {
 		}
 		//find moves of other team now
 		whiteTurn = !whiteTurn;
+		//TODO
+//		currentTeamsKingLocation = new Integer[] {otherKingLocation[0], otherKingLocation[1]};
 		currentTeamMoves = this.findCurrentTeamsMoves();
 		gameOver = noPieceHasMoves() || onlyKingsLeft();
 		return takenLocation;
@@ -381,6 +384,7 @@ public class ChessBoard {
 		board[row][curRookCol] = null;
 		board[row][newRookCol] = castleRook;
 		thisTeam.put(castleRook, new Integer[]{row, newRookCol});
+		castleRook.markMoved();
 	}
 	
 	//returns a piece that the pawn is promoted to based on input
