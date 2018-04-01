@@ -470,7 +470,6 @@ public class ChessBoard {
 	 * @throws IllegalStateException if the game is over
 	 */
 	public boolean curPlayerIsInCheck() {
-		checkIfGameOver();
 		return pieceCausingCheck != null;
 	}
 	
