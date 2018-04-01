@@ -467,7 +467,6 @@ public class ChessBoard {
 	 * checks if the king of the current player is in check
 	 * 
 	 * @return true if he is, false otherwise
-	 * @throws IllegalStateException if the game is over
 	 */
 	public boolean curPlayerIsInCheck() {
 		return pieceCausingCheck != null;
