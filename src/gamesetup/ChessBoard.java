@@ -17,10 +17,9 @@ public class ChessBoard {
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
 	private boolean whiteTurn;
-	private boolean curPlayerInCheck;
 	private boolean gameOver;
 	private Integer[] pawnToPromote;
-	private ChessPiece pieceCausingCheck; //null if !curPlayerInCheck
+	private ChessPiece pieceCausingCheck; //null if current player not in check
 	private ChessPiece doubleJumpPawn; //can only have at most one pawn available for en passant
 	private Map<ChessPiece, Set<PieceMove>> currentTeamMoves;
 	private Integer[] currentTeamsKingLocation;
@@ -332,6 +331,7 @@ public class ChessBoard {
 			}
 		}
 		//possibly causing check
+		pieceCausingCheck = null;
 		Integer[] otherKingLocation = locationOfTeamsKing(!whiteTurn);
 		ChessPiece otherKing = getPieceAtSpot(otherKingLocation[0], otherKingLocation[1]);
 		if(pieceCausedCheck(piece, otherKing)) {
@@ -348,8 +348,17 @@ public class ChessBoard {
 		//find moves of other team now
 		whiteTurn = !whiteTurn;
 		currentTeamMoves = this.findCurrentTeamsMoves();
-		gameOver = currentTeamMoves.isEmpty();
+		gameOver = noPieceHasMoves();
 		return takenLocation;
+	}
+	
+	private boolean noPieceHasMoves() {
+		for(ChessPiece piece : currentTeamMoves.keySet()) {
+			if(!currentTeamMoves.get(piece).isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private void castleRook(int row, int curRookCol, int newRookCol, Map<ChessPiece, Integer[]> thisTeam) {
@@ -462,7 +471,7 @@ public class ChessBoard {
 	 */
 	public boolean curPlayerIsInCheck() {
 		checkIfGameOver();
-		return curPlayerInCheck;
+		return pieceCausingCheck != null;
 	}
 	
 	/**
@@ -473,7 +482,7 @@ public class ChessBoard {
 	 */
 	public Integer[] pieceCausingCheck() {
 		checkIfGameOver();
-		if(!curPlayerInCheck) {
+		if(!curPlayerIsInCheck()) {
 			return null;
 		}
 		if(whiteTurn) {
@@ -492,7 +501,7 @@ public class ChessBoard {
 	 */
 	public Map<Integer, Set<Integer>> inCheckLineOfFire() {
 		checkIfGameOver();
-		if(!curPlayerInCheck) {
+		if(!curPlayerIsInCheck()) {
 			return null;
 		}
 		Integer[] attackingPieceLocation = getSpotOfPiece(pieceCausingCheck);
@@ -615,7 +624,7 @@ public class ChessBoard {
 		if(!isGameOver()) {
 			throw new IllegalStateException("game not over");
 		}
-		return curPlayerInCheck;
+		return curPlayerIsInCheck();
 	}
 	
 	//throws exception if the game is over
