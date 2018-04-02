@@ -2,6 +2,7 @@ package gameplay;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class ChessFrame extends JFrame {
 			chessBoard = new ChessBoard(input);
 			for(int r = 0; r < ChessBoard.SIZE; r++) {
 				for(int c = 0; c < ChessBoard.SIZE; c++) {
-					chessSpots[r][c].setIcon(null);
+					chessSpots[r][c].updateIcon(null);
 				}
 			}
 			setupInitialIcons(true);
@@ -93,6 +94,7 @@ public class ChessFrame extends JFrame {
 	private class ChessSpot extends JButton {
 		private final Color WHITE_SQUARE = Color.WHITE;
 		private final Color BLACK_SQUARE = new Color(139,69,19);
+		private Image pieceImage;
 		
 		/**
 		 * constructs the given spot on the board
@@ -119,9 +121,9 @@ public class ChessFrame extends JFrame {
 						if(chessBoard.validMove(movingPiece, row, col)) {
 							Integer[] takenLocation = chessBoard.makeMove(movingPiece, row, col);
 							if(takenLocation != null) {
-								chessSpots[takenLocation[0]][takenLocation[1]].setIcon(null);
+								chessSpots[takenLocation[0]][takenLocation[1]].updateIcon(null);
 							}
-							chessSpots[pieceToMove[0]][pieceToMove[1]].setIcon(null);
+							chessSpots[pieceToMove[0]][pieceToMove[1]].updateIcon(null);
 							ImageIcon pieceIcon = getPieceIcon(movingPiece);
 							chessSpots[row][col].updateIcon(pieceIcon);
 							//castling
@@ -144,7 +146,7 @@ public class ChessFrame extends JFrame {
 		
 		//moves the rook if castling occured
 		private void moveCastleRook(int row, int oldRookCol, int newRookCol) {
-			chessSpots[row][oldRookCol].setIcon(null);
+			chessSpots[row][oldRookCol].updateIcon(null);
 			ImageIcon rookIcon = getPieceIcon(chessBoard.getPieceAtSpot(row, newRookCol));
 			chessSpots[row][newRookCol].updateIcon(rookIcon);
 		}
@@ -155,9 +157,25 @@ public class ChessFrame extends JFrame {
 		 * @param image The icon to update to
 		 */
 		public void updateIcon(ImageIcon image) {
-			int height = getHeight();
-			Image scaled = image.getImage().getScaledInstance(-1, height, Image.SCALE_SMOOTH);
-			setIcon(new ImageIcon(scaled));
+			if(image == null) {
+				pieceImage = null;
+			} else {
+				pieceImage = image.getImage();
+			}
+			repaint();
+		}
+		
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if(pieceImage == null) {
+				g.drawImage(null, 0, 0, null);
+			} else {
+				int min = Math.min(getWidth(), getHeight());
+				int xLocation = (getWidth() - min)/2;
+				g.drawImage(pieceImage, xLocation, 0, min, min, ChessFrame.this);
+			}
+			
 		}
 	}
 	
