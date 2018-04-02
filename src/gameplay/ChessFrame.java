@@ -173,7 +173,8 @@ public class ChessFrame extends JFrame {
 			} else {
 				int min = Math.min(getWidth(), getHeight());
 				int xLocation = (getWidth() - min)/2;
-				g.drawImage(pieceImage, xLocation, 0, min, min, ChessFrame.this);
+				int yLocation = (getHeight() - min)/2;
+				g.drawImage(pieceImage, xLocation, yLocation, min, min, ChessFrame.this);
 			}
 			
 		}
