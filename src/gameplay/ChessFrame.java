@@ -19,7 +19,6 @@ import pieces.*;
 @SuppressWarnings("serial")
 public class ChessFrame extends JFrame {
 	private ChessBoard chessBoard;
-	private Scanner input;
 	private ChessSpot[][] chessSpots;
 	private final PieceIcons icons;
 	private int[] pieceToMove;
@@ -32,8 +31,7 @@ public class ChessFrame extends JFrame {
 		setMinimumSize(new Dimension(1024, 768));
 		setTitle("Chess");
 		
-		input = new Scanner(System.in);
-		chessBoard = new ChessBoard(input);
+		chessBoard = new ChessBoard();
 		
 		chessSpots = new ChessSpot[ChessBoard.SIZE][ChessBoard.SIZE];
 		JPanel spots = new JPanel();
@@ -79,7 +77,7 @@ public class ChessFrame extends JFrame {
 		}
 		if(JOptionPane.showConfirmDialog(this, message, "Play again?", JOptionPane.YES_NO_OPTION)
 				== JOptionPane.YES_OPTION) { //play again
-			chessBoard = new ChessBoard(input);
+			chessBoard = new ChessBoard();
 			for(int r = 0; r < ChessBoard.SIZE; r++) {
 				for(int c = 0; c < ChessBoard.SIZE; c++) {
 					chessSpots[r][c].updateIcon(null);
@@ -124,6 +122,10 @@ public class ChessFrame extends JFrame {
 								chessSpots[takenLocation[0]][takenLocation[1]].updateIcon(null);
 							}
 							chessSpots[pieceToMove[0]][pieceToMove[1]].updateIcon(null);
+							//pawn promotion
+							if(movingPiece instanceof Pawn && (row == 0 || row == ChessBoard.SIZE - 1)) {
+								movingPiece = chessBoard.getPieceAtSpot(row, col);
+							}
 							ImageIcon pieceIcon = getPieceIcon(movingPiece);
 							chessSpots[row][col].updateIcon(pieceIcon);
 							//castling

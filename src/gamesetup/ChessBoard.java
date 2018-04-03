@@ -16,7 +16,6 @@ import pieces.*;
  */
 public class ChessBoard {
 	public static final int SIZE = 8;
-	private final Scanner input;
 	private Map<ChessPiece, Integer[]> whitePieces;
 	private Map<ChessPiece, Integer[]> blackPieces;
 	private ChessPiece[][] board;
@@ -33,8 +32,7 @@ public class ChessBoard {
 	 * 
 	 * @param input The scanner to use for input on pawn promotion
 	 */
-	public ChessBoard(Scanner input) {
-		this.input = input;
+	public ChessBoard() {
 		board = new ChessPiece[SIZE][SIZE];
 		whitePieces = initializeTeamPieces(true);
 		blackPieces = initializeTeamPieces(false);
@@ -389,19 +387,21 @@ public class ChessBoard {
 	
 	//returns a piece that the pawn is promoted to based on input
 	private ChessPiece promotePawn() {
-		System.out.println("What piece do you want to promote to? (queen, rook, bishop, knight) "); 
-		String type = input.nextLine();
-		if(type.equals("queen")) {
-			return new Queen(whiteTurn);
-		} else if(type.equals("rook")) {
-			return new Rook(whiteTurn);
-		} else if(type.equals("bishop")) {
-			return new Bishop(whiteTurn);
-		} else if(type.equals("knight")) {
-			return new Knight(whiteTurn);
-		} else {
-			return promotePawn();
-		}
+		//TODO: let user actually choose
+//		System.out.println("What piece do you want to promote to? (queen, rook, bishop, knight) "); 
+//		String type = input.nextLine();
+//		if(type.equals("queen")) {
+//			return new Queen(whiteTurn);
+//		} else if(type.equals("rook")) {
+//			return new Rook(whiteTurn);
+//		} else if(type.equals("bishop")) {
+//			return new Bishop(whiteTurn);
+//		} else if(type.equals("knight")) {
+//			return new Knight(whiteTurn);
+//		} else {
+//			return promotePawn();
+//		}
+		return new Queen(whiteTurn);
 	}
 	
 	/**
