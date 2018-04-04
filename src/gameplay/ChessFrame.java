@@ -56,15 +56,8 @@ public class ChessFrame extends JFrame {
 		for(ChessPiece piece : teamPieces.keySet()) {
 			Integer[] location = teamPieces.get(piece);
 			ChessSpot spot = chessSpots[location[0]][location[1]]; 
-			spot.updateIcon(getPieceIcon(piece));
+			spot.updateIcon(icons.getPieceIcon(piece));
 		}
-	}
-	
-	//gets the icon of a piece
-	private ImageIcon getPieceIcon(ChessPiece piece) {
-		String name = piece.getClass().getName();
-		name = name.substring(name.indexOf(".") + 1);
-		return icons.icons.get(piece.isWhite()).get(name);
 	}
 	
 	//performs the end of game actions
@@ -126,7 +119,7 @@ public class ChessFrame extends JFrame {
 							if(movingPiece instanceof Pawn && (row == 0 || row == ChessBoard.SIZE - 1)) {
 								movingPiece = chessBoard.getPieceAtSpot(row, col);
 							}
-							ImageIcon pieceIcon = getPieceIcon(movingPiece);
+							ImageIcon pieceIcon = icons.getPieceIcon(movingPiece);
 							chessSpots[row][col].updateIcon(pieceIcon);
 							//castling
 							if(movingPiece instanceof King && Math.abs(pieceToMove[1] - col) == 2) {
@@ -146,10 +139,10 @@ public class ChessFrame extends JFrame {
 			});
 		}
 		
-		//moves the rook if castling occured
+		//moves the rook if castling occurred
 		private void moveCastleRook(int row, int oldRookCol, int newRookCol) {
 			chessSpots[row][oldRookCol].updateIcon(null);
-			ImageIcon rookIcon = getPieceIcon(chessBoard.getPieceAtSpot(row, newRookCol));
+			ImageIcon rookIcon = icons.getPieceIcon(chessBoard.getPieceAtSpot(row, newRookCol));
 			chessSpots[row][newRookCol].updateIcon(rookIcon);
 		}
 		
@@ -179,32 +172,6 @@ public class ChessFrame extends JFrame {
 				g.drawImage(pieceImage, xLocation, yLocation, min, min, ChessFrame.this);
 			}
 			
-		}
-	}
-	
-	//this class stores all of the icons of the different piece types
-	private class PieceIcons {
-		public final Map<Boolean, Map<String, ImageIcon>> icons;
-		
-		/**
-		 * initializes all of the icons
-		 */
-		public PieceIcons() {
-			icons = new HashMap<>();
-			String[] colors = {"white", "black"};
-			String[] pieces = {"Bishop", "King", "Knight", "Pawn", "Queen", "Rook"};
-			icons.put(true, loadIcons(colors[0], pieces));
-			icons.put(false, loadIcons(colors[1], pieces));
-		}
-		
-		//loads the icons of the given team
-		private Map<String, ImageIcon> loadIcons(String color, String[] pieces) {
-			Map<String, ImageIcon> team = new HashMap<>();
-			for(String piece : pieces) {
-				String filename = color + "_" + piece.toLowerCase();
-				team.put(piece, new ImageIcon(getClass().getResource("/images/" + filename + ".png")));
-			}
-			return team;
 		}
 	}
 }
