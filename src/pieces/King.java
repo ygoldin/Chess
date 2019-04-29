@@ -18,8 +18,6 @@ public class King extends ChessPiece {
 	
 	/**
 	 * constructs a king of the given team
-	 * 
-	 * @param isWhite whether the king is for the white team (true) or black (false)
 	 */
 	public King(boolean isWhite) {
 		this.isWhite = isWhite;

@@ -16,8 +16,6 @@ public class Knight extends ChessPiece {
 	
 	/**
 	 * constructs a knight of the given team
-	 * 
-	 * @param isWhite whether the knight is for the white team (true) or black (false)
 	 */
 	public Knight(boolean isWhite) {
 		this.isWhite = isWhite;

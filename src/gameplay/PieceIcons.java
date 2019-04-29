@@ -35,9 +35,6 @@ public class PieceIcons {
 	
 	/**
 	 * gets the icon of a piece
-	 * 
-	 * @param piece The piece the user is looking for
-	 * @return the image icon representing that piece
 	 */
 	public ImageIcon getPieceIcon(ChessPiece piece) {
 		String name = piece.getClass().getName();

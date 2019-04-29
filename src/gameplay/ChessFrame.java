@@ -148,8 +148,6 @@ public class ChessFrame extends JFrame {
 		
 		/**
 		 * updates the icon of the spot
-		 * 
-		 * @param image The icon to update to
 		 */
 		public void updateIcon(ImageIcon image) {
 			if(image == null) {

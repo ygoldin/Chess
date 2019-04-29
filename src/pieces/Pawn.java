@@ -15,8 +15,6 @@ public class Pawn extends ChessPiece {
 	
 	/**
 	 * constructs a pawn of the given team
-	 * 
-	 * @param isWhite whether the pawn is for the white team (true) or black (false)
 	 */
 	public Pawn(boolean isWhite) {
 		this.isWhite = isWhite;

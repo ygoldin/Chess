@@ -16,8 +16,6 @@ public class Bishop extends ChessPiece {
 	
 	/**
 	 * constructs a bishop of the given team
-	 * 
-	 * @param isWhite whether the bishop is for the white team (true) or black (false)
 	 */
 	public Bishop(boolean isWhite) {
 		this.isWhite = isWhite;

@@ -14,22 +14,16 @@ public abstract class ChessPiece {
 	
 	/**
 	 * finds the point value of the piece
-	 * 
-	 * @return the value
 	 */
 	public abstract int getValue();
 	
 	/**
 	 * finds the symbol representation of the piece type
-	 * 
-	 * @return the symbol
 	 */
 	public abstract String getSymbol();
 	
 	/**
 	 * checks if the piece is on the white or black team
-	 * 
-	 * @return true if white, false if black
 	 */
 	public abstract boolean isWhite();
 	
@@ -39,8 +33,6 @@ public abstract class ChessPiece {
 	 * @param board The chess board the piece is on
 	 * @param findingProtectedSpots whether to add spots that would "attack" its own teammate
 	 * should be true when looking for which spots this piece protects
-	 * @return a set of all of the moves the piece can make: will be empty if it's not the turn
-	 * of this piece's team or no legal moves can be made
 	 * NOTE: this accounts for if the king is in check, only moves to go protect him can be made
 	 * NOTE: this does not account for whether the piece is currently protecting the king from a
 	 * possible check

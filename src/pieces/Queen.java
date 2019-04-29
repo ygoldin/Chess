@@ -16,8 +16,6 @@ public class Queen extends ChessPiece {
 	
 	/**
 	 * constructs a queen of the given team
-	 * 
-	 * @param isWhite whether the queen is for the white team (true) or black (false)
 	 */
 	public Queen(boolean isWhite) {
 		this.isWhite = isWhite;

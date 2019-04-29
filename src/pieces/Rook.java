@@ -17,8 +17,6 @@ public class Rook extends ChessPiece {
 	
 	/**
 	 * constructs a rook of the given team
-	 * 
-	 * @param isWhite whether the rook is for the white team (true) or black (false)
 	 */
 	public Rook(boolean isWhite) {
 		this.isWhite = isWhite;
