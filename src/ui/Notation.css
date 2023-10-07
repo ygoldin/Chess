@@ -1,0 +1,10 @@
+.notationRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.notationValue {
+    width: 100px;
+    justify-content: center;
+}

@@ -1,0 +1,29 @@
+.promotionContainer {
+    background-color: gray;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 100;
+    width: 700px;
+    height: 350px;
+}
+
+@media (max-width: 800px) {
+    .promotionContainer {
+        width: 300px;
+    }
+}
+
+.promotionButtonContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.promotionButtonRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

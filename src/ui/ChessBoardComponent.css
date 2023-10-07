@@ -1,0 +1,33 @@
+.container {
+    width: 800px;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+}
+
+@media (max-width: 800px) {
+    .container {
+        width: 320px;
+    }
+
+    .square {
+        width: 40px;
+        height: 40px;
+    }
+
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+    }
+}

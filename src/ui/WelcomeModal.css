@@ -1,0 +1,31 @@
+.welcomeModal {
+    background-color: gray;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 100;
+    width: 700px;
+    height: 250px;
+}
+
+.welcomeButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.welcomeButton {
+    background-color: brown;
+    width: 50px;
+    height: 30px;
+    color: white;
+}
+
+@media (max-width: 800px) {
+    .welcomeModal {
+        width: 300px;
+    }
+}
