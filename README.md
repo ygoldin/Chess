@@ -29,6 +29,14 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run deploy`
+
+Deploys the page to the homepage specified in the package.json. It pushes the built version to the `gh-pages` branch, which the repository is configured to build a page off of.
+
+You can specify a commit message with `npm run deploy -- -m "Commit message"`.
+
+Note this does not affect the `main` branch, you will still need to push changes to the main branch.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
