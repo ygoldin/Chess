@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Chess/static/css/main.6b9841aa.css",
+    "main.js": "/Chess/static/js/main.9441367d.js",
+    "static/js/787.a0d7b111.chunk.js": "/Chess/static/js/787.a0d7b111.chunk.js",
+    "static/media/white_queen.png": "/Chess/static/media/white_queen.daf0e5cbeee5e18b7213.png",
+    "index.html": "/Chess/index.html",
+    "main.6b9841aa.css.map": "/Chess/static/css/main.6b9841aa.css.map",
+    "main.9441367d.js.map": "/Chess/static/js/main.9441367d.js.map",
+    "787.a0d7b111.chunk.js.map": "/Chess/static/js/787.a0d7b111.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6b9841aa.css",
+    "static/js/main.9441367d.js"
+  ]
+}
